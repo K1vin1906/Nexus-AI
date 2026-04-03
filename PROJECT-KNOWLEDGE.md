@@ -5,7 +5,7 @@
 > **Developer:** K1vin (gaoyingze)
 > **Platform:** macOS (Swift/SwiftUI)
 > **Project Path:** `/Users/gaoyingze/Projects/macai`
-> **Build Command:** `xcodebuild -project macai.xcodeproj -scheme macai -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO OTHER_CODE_SIGN_FLAGS="--entitlements macai/macai-no-icloud.entitlements" build`
+> **Build Command:** `xcodebuild -project NexusAI.xcodeproj -scheme "Nexus AI" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO OTHER_CODE_SIGN_FLAGS="--entitlements macai/macai-no-icloud.entitlements" build`
 
 ---
 

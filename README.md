@@ -36,7 +36,7 @@ Connect to multiple AI providers from a single interface:
 
 ## Quick Start
 1. Clone this repo
-2. Open `macai.xcodeproj` in Xcode
+2. Open `NexusAI.xcodeproj` in Xcode
 3. Build and run
 4. Add your API keys in Settings → API Services
 5. Press `⌥Space` anywhere to start chatting

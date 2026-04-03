@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4A399C9429BC8FEF00E98796"
-               BuildableName = "macai.app"
+               BuildableName = "Nexus AI.app"
                BlueprintName = "macai"
-               ReferencedContainer = "container:macai.xcodeproj">
+               ReferencedContainer = "container:NexusAI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,7 +38,7 @@
                BlueprintIdentifier = "4A399CA529BC8FF200E98796"
                BuildableName = "macaiTests.xctest"
                BlueprintName = "macaiTests"
-               ReferencedContainer = "container:macai.xcodeproj">
+               ReferencedContainer = "container:NexusAI.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "4A399CAF29BC8FF200E98796"
                BuildableName = "macaiUITests.xctest"
                BlueprintName = "macaiUITests"
-               ReferencedContainer = "container:macai.xcodeproj">
+               ReferencedContainer = "container:NexusAI.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4A399C9429BC8FEF00E98796"
-            BuildableName = "macai.app"
+            BuildableName = "Nexus AI.app"
             BlueprintName = "macai"
-            ReferencedContainer = "container:macai.xcodeproj">
+            ReferencedContainer = "container:NexusAI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -109,9 +109,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4A399C9429BC8FEF00E98796"
-            BuildableName = "macai.app"
+            BuildableName = "Nexus AI.app"
             BlueprintName = "macai"
-            ReferencedContainer = "container:macai.xcodeproj">
+            ReferencedContainer = "container:NexusAI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
