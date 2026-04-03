@@ -39,3 +39,4 @@ DerivedData/
 *.Trash
 *.xcworkspace/xcuserdata/*/UserInterfaceState.xcuserstate
 macai.xcodeproj/project.xcworkspace/xcuserdata/*/UserInterfaceState.xcuserstate
+*.xcuserstate
