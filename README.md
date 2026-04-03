@@ -1,6 +1,14 @@
 # Nexus AI
 
+<p align="center">
+  <img src="screenshot-hero.png" alt="Nexus AI" width="100%">
+</p>
+
 A native macOS AI chat client with multi-model support, system-level integration, and privacy-first design.
+
+[![Download](https://img.shields.io/badge/Download-v1.0.0-6C5CE7?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/K1vin1906/Nexus-AI/releases/tag/v1.0.0)
+[![License](https://img.shields.io/badge/License-Apache_2.0-4ECDC4?style=for-the-badge)](LICENSE.md)
+[![macOS](https://img.shields.io/badge/macOS-14.0+-000?style=for-the-badge&logo=apple)](https://github.com/K1vin1906/Nexus-AI)
 
 ## Features
 
