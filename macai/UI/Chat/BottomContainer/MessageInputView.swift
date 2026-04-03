@@ -25,6 +25,8 @@ struct MessageInputView: View {
     var onStopInference: () -> Void
     var onCancelEdit: () -> Void
 
+    @ObservedObject var speechManager: SpeechManager
+
     private let frontReturnKeyType: MacaiTextField.ReturnKeyType = .next
     @State var isFocused: Focus?
     private let inputPlaceholderText: String
@@ -115,6 +117,7 @@ struct MessageInputView: View {
         onAddFile: @escaping () -> Void,
         onStopInference: @escaping () -> Void,
         onCancelEdit: @escaping () -> Void = {},
+        speechManager: SpeechManager,
         inputPlaceholderText: String = "Type your prompt here",
         cornerRadius: Double = 20.0
     ) {
@@ -131,6 +134,7 @@ struct MessageInputView: View {
         self.onAddFile = onAddFile
         self.onStopInference = onStopInference
         self.onCancelEdit = onCancelEdit
+        self._speechManager = ObservedObject(wrappedValue: speechManager)
         self.inputPlaceholderText = inputPlaceholderText
         self.cornerRadius = cornerRadius
     }
@@ -231,6 +235,15 @@ struct MessageInputView: View {
                     .buttonStyle(PlainButtonStyle())
                     .help("Add attachment")
                 }
+
+                // Voice input button
+                VoiceInputButton(speechManager: speechManager) { transcribedText in
+                    if text.isEmpty {
+                        text = transcribedText
+                    } else {
+                        text += " " + transcribedText
+                    }
+                }
                 
                 MacaiTextField(
                     effectivePlaceholderText,
@@ -278,6 +291,23 @@ struct MessageInputView: View {
                 }
             }
             .animation(stopButtonAnimation, value: shouldShowAccessoryButton)
+        }
+        .overlay(alignment: .top) {
+            if speechManager.isListening {
+                VoiceStatusOverlay(
+                    speechManager: speechManager,
+                    onCancel: {
+                        speechManager.stopListening()
+                        speechManager.recognizedText = ""
+                    },
+                    onDone: {
+                        speechManager.stopListening()
+                    }
+                )
+                .offset(y: -100)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: speechManager.isListening)
+            }
         }
         .scaleEffect(isHoveringDropZone ? 1.02 : 1.0)
         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHoveringDropZone)

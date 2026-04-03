@@ -34,6 +34,7 @@ struct ChatView: View {
     @StateObject private var store = ChatStore(persistenceController: PersistenceController.shared)
     @StateObject private var logicHandler: ChatLogicHandler
     @StateObject private var draftManager: ChatDraftManager
+    @StateObject private var speechManager = SpeechManager()
     
     // Environment
     @Environment(\.colorScheme) private var colorScheme
@@ -100,6 +101,7 @@ struct ChatView: View {
             chatMessagesView
             chatInputView
         }
+        .environmentObject(speechManager)
         .background(backgroundColor)
         .navigationTitle(chat.name != "" ? chat.name : chat.persona?.name ?? "macai LLM chat")
         .onAppear(perform: {
@@ -154,6 +156,7 @@ struct ChatView: View {
             guard let notificationChat = notification.object as? ChatEntity, notificationChat == chat else { return }
             if let lastMessage = chat.lastMessage, !lastMessage.own {
                 finalizeReasoningTimingIfNeeded(for: lastMessage)
+                speechManager.autoSpeakIfEnabled(lastMessage.body)
             }
             lastRequestStartTime = nil
         }
@@ -161,6 +164,18 @@ struct ChatView: View {
             updateLiveReasoningDurationIfNeeded()
         }
         .toolbar {
+            // Auto-TTS toggle
+            Button(action: {
+                speechManager.autoSpeak.toggle()
+                if !speechManager.autoSpeak {
+                    speechManager.stopSpeaking()
+                }
+            }) {
+                Image(systemName: speechManager.autoSpeak ? "speaker.wave.2.fill" : "speaker.slash")
+                    .foregroundColor(speechManager.autoSpeak ? .accentColor : .secondary)
+            }
+            .help(speechManager.autoSpeak ? "Auto-speak is ON" : "Auto-speak is OFF")
+
             if !searchText.isEmpty && !chatViewModel.searchOccurrences.isEmpty {
                 SearchNavigationView(chatViewModel: chatViewModel)
             }
@@ -220,7 +235,8 @@ struct ChatView: View {
             onAddImage: handleAddImage,
             onAddFile: handleAddFile,
             onStopInference: handleStopInference,
-            onCancelSystemMessageEdit: cancelSystemMessageEdit
+            onCancelSystemMessageEdit: cancelSystemMessageEdit,
+            speechManager: speechManager
         )
     }
 

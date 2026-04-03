@@ -23,7 +23,8 @@ struct ChatBottomContainerView: View {
     var onAddFile: () -> Void
     var onStopInference: () -> Void
     var onCancelEdit: () -> Void
-    var onExpandedStateChange: ((Bool) -> Void)?  // Add this line
+    var onExpandedStateChange: ((Bool) -> Void)?
+    @ObservedObject var speechManager: SpeechManager
 
     init(
         chat: ChatEntity,
@@ -42,7 +43,8 @@ struct ChatBottomContainerView: View {
         onAddFile: @escaping () -> Void = {},
         onStopInference: @escaping () -> Void = {},
         onCancelEdit: @escaping () -> Void = {},
-        onExpandedStateChange: ((Bool) -> Void)? = nil
+        onExpandedStateChange: ((Bool) -> Void)? = nil,
+        speechManager: SpeechManager = SpeechManager()
     ) {
         self.chat = chat
         self._newMessage = newMessage
@@ -61,6 +63,7 @@ struct ChatBottomContainerView: View {
         self.onStopInference = onStopInference
         self.onCancelEdit = onCancelEdit
         self.onExpandedStateChange = onExpandedStateChange
+        self._speechManager = ObservedObject(wrappedValue: speechManager)
 
         if chat.messagesArray.isEmpty {
             DispatchQueue.main.async {
@@ -93,7 +96,8 @@ struct ChatBottomContainerView: View {
                         onAddImage: onAddImage,
                         onAddFile: onAddFile,
                         onStopInference: onStopInference,
-                        onCancelEdit: onCancelEdit
+                        onCancelEdit: onCancelEdit,
+                        speechManager: speechManager
                     )
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .multilineTextAlignment(.leading)

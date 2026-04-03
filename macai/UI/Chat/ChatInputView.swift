@@ -26,6 +26,7 @@ struct ChatInputView: View {
     let onStopInference: () -> Void
     let onCancelSystemMessageEdit: () -> Void
     
+    @ObservedObject var speechManager: SpeechManager
     @StateObject private var store = ChatStore(persistenceController: PersistenceController.shared)
     
     var body: some View {
@@ -55,7 +56,8 @@ struct ChatInputView: View {
             onAddImage: onAddImage,
             onAddFile: onAddFile,
             onStopInference: onStopInference,
-            onCancelEdit: onCancelSystemMessageEdit
+            onCancelEdit: onCancelSystemMessageEdit,
+            speechManager: speechManager
         )
     }
 }
@@ -76,6 +78,7 @@ struct ChatInputView: View {
         onAddImage: {},
         onAddFile: {},
         onStopInference: {},
-        onCancelSystemMessageEdit: {}
+        onCancelSystemMessageEdit: {},
+        speechManager: SpeechManager()
     )
 }

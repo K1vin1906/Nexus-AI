@@ -7,12 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		"'AA00010200000001VOICE002'" = {isa = PBXBuildFile; fileRef = AA00010100000001VOICE001; };
+		"'AA00010400000002VOICE004'" = {isa = PBXBuildFile; fileRef = AA00010300000002VOICE003; };
 		0BA0FF405FC14D3FABF82621 /* APIServiceTemplateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA7767A135E47FFAB9E3289 /* APIServiceTemplateProvider.swift */; };
 		0E6BF47F5D74490F95504FF6 /* GeminiHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1475CF2DC44692A9E47B9A /* GeminiHandlerTests.swift */; };
 		1001F81047D94F5484238553 /* APIServiceTemplateAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774456B942348B88C536014 /* APIServiceTemplateAddView.swift */; };
+		14C347F1AC02E4CB09C7A2E8 /* IntentAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC63424E92900541247F1012 /* IntentAIService.swift */; };
 		16E55B88D2D449948BD6C60F /* APIServiceTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9230773084F7E92FFB3AD /* APIServiceTemplate.swift */; };
 		2DEB5B6E4EFE4D8C90FBA248 /* MacaiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F05D023BB34EF796C7F7D3 /* MacaiTextField.swift */; };
+		33B54ACC9E9EF38AD23708C6 /* SummarizeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65242258A1BD9F5C20F10BE /* SummarizeIntent.swift */; };
 		40D375E212F2451ABC09D333 /* QuickLookPreviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090CED78E6224CCB84778089 /* QuickLookPreviewer.swift */; };
+		4367407393C37CBD8048A24D /* QuickPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024A459CA44C1FE35967B1CC /* QuickPanelWindow.swift */; };
 		4A0BCBBC2D5199140033AB96 /* ButtonWithStatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0BCBBB2D5199140033AB96 /* ButtonWithStatusIndicator.swift */; };
 		4A0E02852D0F571000D2FAF3 /* PerplexityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0E02842D0F571000D2FAF3 /* PerplexityHandler.swift */; };
 		4A146A022F103E3E004249A2 /* DocumentAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A146A012F103E3E004249A2 /* DocumentAttachment.swift */; };
@@ -105,11 +110,19 @@
 		4AFEE7252C472FB1006F99FB /* OllamaHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFEE7242C472FB1006F99FB /* OllamaHandler.swift */; };
 		4F432A6BC5E64A3390D5F2C5 /* PDFHandlingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFF573F6F9A453BAFF2C3A5 /* PDFHandlingTests.swift */; };
 		537028A45E2C4DD7A33DA2D2 /* APIServiceTemplates.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E9696501A3843E4A2D9926B /* APIServiceTemplates.json */; };
+		538644B18A25B1943843063B /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06B4D2EA9EEF0C201BD1695 /* ClipboardMonitor.swift */; };
 		7C2B9A4B2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B9A4A2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift */; };
 		7CEEFA33B4C841A2AC2BFBA2 /* APIServiceTemplateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D75E6599084CC8A6C8587C /* APIServiceTemplateProviderTests.swift */; };
 		9A040A4C76354F309DF6CB6F /* NotificationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14461D2B9E6A48DEB427E5F1 /* NotificationPresenter.swift */; };
 		B2E47C1C2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E47C1B2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift */; };
 		B2E47C1E2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E47C1D2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift */; };
+		B33F4E7791E0B46678B29765 /* NexusAIShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512F40B989064BD2EBDF932E /* NexusAIShortcuts.swift */; };
+		B3D448C0B9CF3B2EBD4C1DA4 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959946F8AEBCF83AE52C0B2D /* SpeechManager.swift */; };
+		B5BD4EF9BAC34FAC53DCD725 /* QuickInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD549EF9DCA02F6C701458B /* QuickInputView.swift */; };
+		D0404097AE4A8BD6317F7C49 /* QuickPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B74E108038FC8DFC1E3413 /* QuickPanelController.swift */; };
+		D2544C5BA68F98D07AD542A3 /* VoiceInputButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767346AB9C723925C5457680 /* VoiceInputButton.swift */; };
+		D96F4DAEA85BF9A6200336F7 /* PrivacyModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */; };
+		DFE34FDA9DCA384969E5ECD1 /* AskAIIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBD47AB9E0C914BE3CE2F60 /* AskAIIntent.swift */; };
 		E12F358385C44407B2AAAF94 /* PreviewFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2681BF4ED394B949A864169 /* PreviewFileHelper.swift */; };
 		F595CD3876D345D794C42AFF /* APIServiceTemplateAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B74289407745C983DD1294 /* APIServiceTemplateAddViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -145,6 +158,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		"'AA00010100000001VOICE001'" = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		"'AA00010300000002VOICE003'" = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputButton.swift; sourceTree = "<group>"; };
+		024A459CA44C1FE35967B1CC /* QuickPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickPanelWindow.swift; path = macai/UI/QuickPanel/QuickPanelWindow.swift; sourceTree = SOURCE_ROOT; };
 		04F05D023BB34EF796C7F7D3 /* MacaiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacaiTextField.swift; sourceTree = "<group>"; };
 		090CED78E6224CCB84778089 /* QuickLookPreviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookPreviewer.swift; sourceTree = "<group>"; };
 		14461D2B9E6A48DEB427E5F1 /* NotificationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPresenter.swift; sourceTree = "<group>"; };
@@ -242,14 +258,24 @@
 		4AFEE7202C472F53006F99FB /* APIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProtocol.swift; sourceTree = "<group>"; };
 		4AFEE7222C472FA1006F99FB /* ChatGPTHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTHandler.swift; sourceTree = "<group>"; };
 		4AFEE7242C472FB1006F99FB /* OllamaHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaHandler.swift; sourceTree = "<group>"; };
+		512F40B989064BD2EBDF932E /* NexusAIShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NexusAIShortcuts.swift; path = macai/Intents/NexusAIShortcuts.swift; sourceTree = SOURCE_ROOT; };
 		5774456B942348B88C536014 /* APIServiceTemplateAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTemplateAddView.swift; sourceTree = "<group>"; };
 		62B9230773084F7E92FFB3AD /* APIServiceTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTemplate.swift; sourceTree = "<group>"; };
+		75B74E108038FC8DFC1E3413 /* QuickPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickPanelController.swift; path = macai/UI/QuickPanel/QuickPanelController.swift; sourceTree = SOURCE_ROOT; };
+		767346AB9C723925C5457680 /* VoiceInputButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VoiceInputButton.swift; path = macai/UI/Chat/VoiceInputButton.swift; sourceTree = SOURCE_ROOT; };
 		7C2B9A4A2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseMigrationTests.swift; sourceTree = "<group>"; };
 		7E9696501A3843E4A2D9926B /* APIServiceTemplates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = APIServiceTemplates.json; sourceTree = "<group>"; };
+		94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrivacyModeManager.swift; path = macai/Utilities/PrivacyModeManager.swift; sourceTree = SOURCE_ROOT; };
+		959946F8AEBCF83AE52C0B2D /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechManager.swift; path = macai/Utilities/SpeechManager.swift; sourceTree = SOURCE_ROOT; };
+		B06B4D2EA9EEF0C201BD1695 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClipboardMonitor.swift; path = macai/Utilities/ClipboardMonitor.swift; sourceTree = SOURCE_ROOT; };
 		B2681BF4ED394B949A864169 /* PreviewFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewFileHelper.swift; sourceTree = "<group>"; };
 		B2E47C1B2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIHandlerBase.swift; sourceTree = "<group>"; };
 		B2E47C1D2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIResponsesHandler.swift; sourceTree = "<group>"; };
 		BEFF573F6F9A453BAFF2C3A5 /* PDFHandlingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFHandlingTests.swift; sourceTree = "<group>"; };
+		BFD549EF9DCA02F6C701458B /* QuickInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickInputView.swift; path = macai/UI/QuickPanel/QuickInputView.swift; sourceTree = SOURCE_ROOT; };
+		CC63424E92900541247F1012 /* IntentAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IntentAIService.swift; path = macai/Intents/IntentAIService.swift; sourceTree = SOURCE_ROOT; };
+		DFBD47AB9E0C914BE3CE2F60 /* AskAIIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AskAIIntent.swift; path = macai/Intents/AskAIIntent.swift; sourceTree = SOURCE_ROOT; };
+		E65242258A1BD9F5C20F10BE /* SummarizeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SummarizeIntent.swift; path = macai/Intents/SummarizeIntent.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -345,6 +371,7 @@
 			children = (
 				4AC37B622F1255C0006FD196 /* AttachmentPreviewViews.swift */,
 				4AC37B7D2F14000100D1A2B3 /* ChatDraftManager.swift */,
+				AA00010300000002VOICE003,
 				4A1E16832E16DB4500E5CBA3 /* ChatInputView.swift */,
 				4A1E16842E16DB4500E5CBA3 /* ChatMessagesView.swift */,
 				4A1E16822E16DB4500E5CBA3 /* ChatLogicHandler.swift */,
@@ -457,6 +484,7 @@
 				B2681BF4ED394B949A864169 /* PreviewFileHelper.swift */,
 				090CED78E6224CCB84778089 /* QuickLookPreviewer.swift */,
 				4AA6EF5C2C566009003B6D41 /* MessageManager.swift */,
+				AA00010100000001VOICE001,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -471,6 +499,17 @@
 				4A399C9629BC8FEF00E98796 /* Products */,
 				4A5C394629D834DC00BCB534 /* Frameworks */,
 				4A7E44C02F06C91E001DE975 /* AppIcon.icon */,
+				024A459CA44C1FE35967B1CC /* QuickPanelWindow.swift */,
+				75B74E108038FC8DFC1E3413 /* QuickPanelController.swift */,
+				BFD549EF9DCA02F6C701458B /* QuickInputView.swift */,
+				B06B4D2EA9EEF0C201BD1695 /* ClipboardMonitor.swift */,
+				959946F8AEBCF83AE52C0B2D /* SpeechManager.swift */,
+				767346AB9C723925C5457680 /* VoiceInputButton.swift */,
+				DFBD47AB9E0C914BE3CE2F60 /* AskAIIntent.swift */,
+				E65242258A1BD9F5C20F10BE /* SummarizeIntent.swift */,
+				CC63424E92900541247F1012 /* IntentAIService.swift */,
+				512F40B989064BD2EBDF932E /* NexusAIShortcuts.swift */,
+				94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -765,6 +804,8 @@
 				4A2B9E952CE1272E00C8042F /* RequestMessagesTransformer.swift in Sources */,
 				4AB4B0912D778B1D00CA41B6 /* OpenRouterHandler.swift in Sources */,
 				4AC37B7E2F14000100D1A2B3 /* ChatDraftManager.swift in Sources */,
+				AA00010200000001VOICE002,
+				AA00010400000002VOICE004,
 				4A5F64BA29C64F9D000403F7 /* ChatView.swift in Sources */,
 				4AFEE7212C472F53006F99FB /* APIProtocol.swift in Sources */,
 				4A885C542CEA3D960018BBED /* PreviewStateManager.swift in Sources */,
@@ -802,6 +843,17 @@
 				4A1E16872E16DB4600E5CBA3 /* ChatLogicHandler.swift in Sources */,
 				4AFEE7252C472FB1006F99FB /* OllamaHandler.swift in Sources */,
 				4AE8691B2D5696A300E3B3AC /* GeminiHandler.swift in Sources */,
+				4367407393C37CBD8048A24D /* QuickPanelWindow.swift in Sources */,
+				D0404097AE4A8BD6317F7C49 /* QuickPanelController.swift in Sources */,
+				B5BD4EF9BAC34FAC53DCD725 /* QuickInputView.swift in Sources */,
+				538644B18A25B1943843063B /* ClipboardMonitor.swift in Sources */,
+				B3D448C0B9CF3B2EBD4C1DA4 /* SpeechManager.swift in Sources */,
+				D2544C5BA68F98D07AD542A3 /* VoiceInputButton.swift in Sources */,
+				DFE34FDA9DCA384969E5ECD1 /* AskAIIntent.swift in Sources */,
+				33B54ACC9E9EF38AD23708C6 /* SummarizeIntent.swift in Sources */,
+				14C347F1AC02E4CB09C7A2E8 /* IntentAIService.swift in Sources */,
+				B33F4E7791E0B46678B29765 /* NexusAIShortcuts.swift in Sources */,
+				D96F4DAEA85BF9A6200336F7 /* PrivacyModeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +1039,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 2.4.2;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1030,6 +1088,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 2.4.2;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1054,6 +1118,12 @@
 				DEVELOPMENT_TEAM = ZRB8WDV435;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = notfullin.com.macaiTests;
@@ -1077,6 +1147,12 @@
 				DEVELOPMENT_TEAM = ZRB8WDV435;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = notfullin.com.macaiTests;
@@ -1099,6 +1175,12 @@
 				DEVELOPMENT_TEAM = ZRB8WDV435;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = notfullin.com.macaiUITests;
@@ -1121,6 +1203,12 @@
 				DEVELOPMENT_TEAM = ZRB8WDV435;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/macai/UI/QuickPanel",
+					"$(SRCROOT)/macai/Utilities",
+					"$(SRCROOT)/macai/UI/Chat",
+					"$(SRCROOT)/macai/Intents",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = notfullin.com.macaiUITests;

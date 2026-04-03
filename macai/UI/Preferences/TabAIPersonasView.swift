@@ -227,6 +227,7 @@ struct PersonaDetailView: View {
                     onAddImage: {},
                     onAddFile: {},
                     onStopInference: {},
+                    speechManager: SpeechManager(),
                     inputPlaceholderText: "Enter system message here",
                     cornerRadius: 4
                 )

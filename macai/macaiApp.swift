@@ -393,6 +393,9 @@ struct macaiApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .preferredColorScheme(preferredColorScheme)
+                .onAppear {
+                    QuickPanelController.shared.setup(viewContext: persistenceController.container.viewContext)
+                }
 
         }
         .onChange(of: scenePhase) { phase in

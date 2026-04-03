@@ -64,6 +64,7 @@ struct ChatBubbleView: View, Equatable {
     @State private var showingDeleteConfirmation = false
     @State private var isCopied = false
     @AppStorage("chatFontSize") private var chatFontSize: Double = 14.0
+    @EnvironmentObject private var speechManager: SpeechManager
 
     private var effectiveFontSize: Double {
         chatFontSize
@@ -467,6 +468,20 @@ struct ChatBubbleView: View, Equatable {
                     }
                 }
             )
+
+            if !content.own && !content.systemMessage {
+                ToolbarButton(
+                    icon: speechManager.isSpeaking ? "stop.fill" : "speaker.wave.2",
+                    text: speechManager.isSpeaking ? "Stop" : "Speak",
+                    action: {
+                        if speechManager.isSpeaking {
+                            speechManager.stopSpeaking()
+                        } else {
+                            speechManager.speak(content.message)
+                        }
+                    }
+                )
+            }
 
             if !content.systemMessage {
                 ToolbarButton(
