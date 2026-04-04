@@ -230,6 +230,31 @@ struct TabGeneralSettingsView: View {
                     .padding(8)
                 }
 
+                // Smart Routing (B3)
+                GroupBox {
+                    Grid(alignment: .leading, verticalSpacing: 8) {
+                        GridRow {
+                            HStack {
+                                Text("Smart Routing")
+                                Spacer()
+                            }
+                            .frame(width: 120)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Toggle("Auto-select best model", isOn: Binding(
+                                    get: { SmartRouter.shared.isEnabled },
+                                    set: { SmartRouter.shared.isEnabled = $0 }
+                                ))
+                                Text("Automatically route queries to the best provider (code → DeepSeek, images → Gemini, etc.)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                    .padding(8)
+                }
+
                 // iCloud Sync Section - hidden when DISABLE_ICLOUD flag is set or CloudKit is not configured
                 #if !DISABLE_ICLOUD
                 if AppConstants.cloudKitContainerIdentifier != nil {
@@ -339,7 +364,6 @@ struct TabGeneralSettingsView: View {
             }
 
         }
-        .padding()
         .onAppear {
             self.selectedColorSchemeRaw = self.preferredColorSchemeRaw
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {

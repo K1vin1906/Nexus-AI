@@ -558,8 +558,7 @@ struct BackupRestoreView: View {
                 .padding(8)
             }
         }
-        .padding()
-        .frame(minHeight: 420, maxHeight: 480)
+        .frame(minHeight: 420)
         .onAppear {
             refreshBackups()
         }
