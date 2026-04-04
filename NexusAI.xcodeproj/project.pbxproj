@@ -41,6 +41,7 @@
 		4A27FF952DA1C4640075D730 /* ImageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A27FF922DA1C4640075D730 /* ImageAttachment.swift */; };
 		4A2842492C87014800E5C920 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 4A2842482C87014800E5C920 /* KeychainAccess */; };
 		4A28424B2C87018C00E5C920 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A28424A2C87018800E5C920 /* TokenManager.swift */; };
+		C731619AB99A434E92FA5748 /* ChatExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */; };
 		4A2B9E952CE1272E00C8042F /* RequestMessagesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2B9E942CE1272E00C8042F /* RequestMessagesTransformer.swift */; };
 		4A2D3CEB2D5794B10082A262 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2D3CEA2D5794B00082A262 /* ThemeMode.swift */; };
 		4A315DB22C8CD8410095ABD1 /* TabAIPersonasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A315DB12C8CD8410095ABD1 /* TabAIPersonasView.swift */; };
@@ -191,6 +192,7 @@
 		4A27FF922DA1C4640075D730 /* ImageAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachment.swift; sourceTree = "<group>"; };
 		4A27FF932DA1C4640075D730 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		4A28424A2C87018800E5C920 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
+		A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatExportService.swift; sourceTree = "<group>"; };
 		4A2B9E942CE1272E00C8042F /* RequestMessagesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMessagesTransformer.swift; sourceTree = "<group>"; };
 		4A2D3CEA2D5794B00082A262 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		4A315DB12C8CD8410095ABD1 /* TabAIPersonasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAIPersonasView.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				4AEB7E1A2C8D04A30004818C /* DatabasePatcher.swift */,
 				14461D2B9E6A48DEB427E5F1 /* NotificationPresenter.swift */,
 				4A28424A2C87018800E5C920 /* TokenManager.swift */,
+				A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */,
 				3EA7767A135E47FFAB9E3289 /* APIServiceTemplateProvider.swift */,
 				4AFEE71F2C472F29006F99FB /* APIHandlers */,
 				4ABDBE6529F86B5900661B2D /* MessageParser.swift */,
@@ -781,6 +784,7 @@
 				4A885C522CEA3B130018BBED /* HTMLPreviewView.swift in Sources */,
 				4A55DCA729C264BC00A3800C /* TableView.swift in Sources */,
 				4A28424B2C87018C00E5C920 /* TokenManager.swift in Sources */,
+				C731619AB99A434E92FA5748 /* ChatExportService.swift in Sources */,
 				0BA0FF405FC14D3FABF82621 /* APIServiceTemplateProvider.swift in Sources */,
 				4ACE2FB82D61656000DEEA6D /* SwipeModifier.swift in Sources */,
 				4A0BCBBC2D5199140033AB96 /* ButtonWithStatusIndicator.swift in Sources */,

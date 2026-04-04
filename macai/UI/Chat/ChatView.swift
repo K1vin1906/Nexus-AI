@@ -176,6 +176,22 @@ struct ChatView: View {
             }
             .help(speechManager.autoSpeak ? "Auto-speak is ON" : "Auto-speak is OFF")
 
+            // Export menu
+            Menu {
+                Button(action: { ChatExportService.export(chat: chat, format: .markdown) }) {
+                    Label("Export as Markdown", systemImage: "doc.text")
+                }
+                Button(action: { ChatExportService.export(chat: chat, format: .html) }) {
+                    Label("Export as HTML", systemImage: "globe")
+                }
+                Button(action: { ChatExportService.export(chat: chat, format: .pdf) }) {
+                    Label("Export as PDF", systemImage: "doc.richtext")
+                }
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+            }
+            .help("Export conversation")
+
             if !searchText.isEmpty && !chatViewModel.searchOccurrences.isEmpty {
                 SearchNavigationView(chatViewModel: chatViewModel)
             }
