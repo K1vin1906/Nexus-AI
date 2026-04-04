@@ -35,7 +35,7 @@ class MessageManager: ObservableObject {
         contextSize: Int,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
-        let providerName = chat.apiService?.type ?? apiService.name
+        let providerName = apiService.name
         
         if !WebSearchService.supportsNativeSearch(providerName) {
             // Async search first, then send
@@ -134,7 +134,7 @@ class MessageManager: ObservableObject {
             defer { self.streamTask = nil }
             
             // Web search for providers without native search
-            let providerName = chat.apiService?.type ?? self.apiService.name
+            let providerName = self.apiService.name
             if !WebSearchService.supportsNativeSearch(providerName) {
                 let searchResult = await WebSearchService.shared.search(query: message)
                 self.pendingSearchContext = searchResult?.formattedContext()
