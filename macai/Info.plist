@@ -21,7 +21,9 @@
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://renset.dev/macai/appcast.xml</string>
+	<string>https://k1vin1906.github.io/Nexus-AI/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>o8Gy54fWPpmRujkXAS7/U5mhz8yBZGdCkwtvv5LOFA4=</string>
 	<key>SUPublicEDKey</key>
 	<string>b2+Lx88mRPO5YKCOyTZET091/tSpMKrqwMNCEwahQCU=</string>
 	<key>SUScheduledCheckInterval</key>

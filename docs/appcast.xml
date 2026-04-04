@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Nexus AI Updates</title>
+    <link>https://github.com/K1vin1906/Nexus-AI</link>
+    <description>Nexus AI app updates</description>
+    <language>en</language>
+    <item>
+      <title>Nexus AI v1.0.0</title>
+      <pubDate>Thu, 03 Apr 2026 16:00:00 +0000</pubDate>
+      <sparkle:version>2.4.2</sparkle:version>
+      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <h2>Nexus AI v1.0.0 — First Release</h2>
+        <ul>
+          <li>9 AI Providers: Gemini, DeepSeek, Claude, OpenAI, Ollama, OpenRouter, Perplexity, xAI</li>
+          <li>Quick Panel with ⌥Space global hotkey</li>
+          <li>Clipboard Intelligence</li>
+          <li>Privacy Mode — local Ollama</li>
+          <li>File drag-and-drop (30+ formats)</li>
+          <li>Apple Shortcuts integration</li>
+          <li>Voice input and TTS</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://github.com/K1vin1906/Nexus-AI/releases/download/v1.0.0/NexusAI-v1.0.0-mac.dmg"
+        length="11527742"
+        type="application/octet-stream"
+        sparkle:edSignature="Ri7eMMPnXZaeQYAtR/QDAtys0EcVTZaiFmRrwoQMZTQi22bbPv9kqKXlzt+jw8SREpd1eNsRJ05fwBSSnIrqDw=="
+      />
+    </item>
+  </channel>
+</rss>
