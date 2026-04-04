@@ -141,19 +141,27 @@ class ChatExportService {
 
     // MARK: - PDF Export
 
+    private static var pdfWebView: WKWebView?
+
     static func exportHTMLToPDF(html: String, outputURL: URL) {
         let webView = WKWebView(frame: NSRect(x: 0, y: 0, width: 612, height: 792))
+        pdfWebView = webView  // Retain until export completes
         webView.loadHTMLString(html, baseURL: nil)
 
-        // Wait for content to load, then create PDF
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             webView.createPDF { result in
                 switch result {
                 case .success(let data):
-                    try? data.write(to: outputURL)
+                    do {
+                        try data.write(to: outputURL)
+                        NSWorkspace.shared.selectFile(outputURL.path, inFileViewerRootedAtPath: outputURL.deletingLastPathComponent().path)
+                    } catch {
+                        print("PDF write failed: \(error)")
+                    }
                 case .failure(let error):
                     print("PDF export failed: \(error)")
                 }
+                pdfWebView = nil  // Release
             }
         }
     }
