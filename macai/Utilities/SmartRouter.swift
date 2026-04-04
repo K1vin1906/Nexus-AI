@@ -197,10 +197,17 @@ class SmartRouter {
 
     private func matchesSearch(_ text: String) -> Bool {
         let keywords = [
-            "latest news", "最新", "current price", "当前价格",
-            "what happened today", "今天发生", "search for", "搜索",
-            "weather", "天气", "stock price", "股价",
-            "who won", "谁赢了", "score of", "比分",
+            // English
+            "latest news", "current price", "what happened today",
+            "search for", "weather", "stock price", "who won", "score of",
+            "what time", "what date", "today's date", "right now",
+            "how much is", "latest", "recent", "currently",
+            "news about", "update on", "price of",
+            // Chinese
+            "最新", "当前价格", "今天发生", "搜索",
+            "天气", "股价", "谁赢了", "比分",
+            "今天", "现在", "几月", "几号", "几点",
+            "多少钱", "新闻", "最近", "目前",
         ]
         return keywords.contains(where: { text.contains($0) })
     }

@@ -421,8 +421,9 @@ class MessageManager: ObservableObject {
                 systemContent += searchContext
                 pendingSearchContext = nil
             }
-            // D3: Inject MCP tool descriptions if any are available
-            if let mcpToolsPrompt = MCPToolRouter.shared.cachedToolsPrompt() {
+            // D3: Inject MCP tool descriptions only for Gemini (other providers misinterpret tool calls)
+            if apiService is GeminiHandler,
+               let mcpToolsPrompt = MCPToolRouter.shared.cachedToolsPrompt() {
                 systemContent += mcpToolsPrompt
             }
             messages.append([
