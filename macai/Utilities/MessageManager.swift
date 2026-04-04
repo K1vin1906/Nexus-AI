@@ -37,7 +37,11 @@ class MessageManager: ObservableObject {
     ) {
         let providerName = apiService.name
         
-        if !WebSearchService.supportsNativeSearch(providerName) {
+        // Only trigger web search for queries that need real-time info
+        let needsSearch = !WebSearchService.supportsNativeSearch(providerName)
+            && SmartRouter.shared.classify(message) == .search
+        
+        if needsSearch {
             // Async search first, then send
             Task { @MainActor in
                 let searchResult = await WebSearchService.shared.search(query: message)
@@ -133,9 +137,11 @@ class MessageManager: ObservableObject {
             guard let self = self else { return }
             defer { self.streamTask = nil }
             
-            // Web search for providers without native search
+            // Web search only for queries that need real-time info
             let providerName = self.apiService.name
-            if !WebSearchService.supportsNativeSearch(providerName) {
+            let needsSearch = !WebSearchService.supportsNativeSearch(providerName)
+                && SmartRouter.shared.classify(message) == .search
+            if needsSearch {
                 let searchResult = await WebSearchService.shared.search(query: message)
                 self.pendingSearchContext = searchResult?.formattedContext()
             } else {
