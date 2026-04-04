@@ -52,6 +52,10 @@ NexusAI/
     │   ├── AppConstants.swift      — 全局常量、Provider 默认配置
     │   ├── APIServiceTemplates.json — Provider 模板（UI 显示名+模型列表）
     │   └── NexusTheme.swift        — ⭐ v1.2 品牌色+语义色+ThemeManager
+    ├── MCP/                        — ⭐ v2.0 D3 MCP 协议支持
+    │   ├── MCPClientManager.swift   — 多服务器连接管理+工具发现
+    │   ├── MCPConfigStore.swift     — JSON 配置持久化
+    │   └── MCPToolRouter.swift      — 工具路由+prompt 注入+call 解析
     ├── Models/
     │   ├── ImageAttachment.swift
     │   ├── DocumentAttachment.swift
@@ -167,6 +171,7 @@ openai-responses, chatgpt, claude, gemini, deepseek, ollama, perplexity, openrou
 **v2.0 (进行中):**
 - A3 消息气泡重设计 — NexusTheme 品牌色气泡 + Provider 头像 + hover 时间戳
 - A6 设置页现代化 — NavigationSplitView 侧边栏导航 + section headers + DangerZone 卡片布局 + 720px 宽度
+- D3 MCP 协议支持 — MCP Swift SDK 集成 + MCPClientManager 多服务器连接 + MCPToolRouter 工具路由 + 设置页 MCP 面板 + chat 流中自动检测/执行 tool_call
 
 ---
 
@@ -234,7 +239,7 @@ openai-responses, chatgpt, claude, gemini, deepseek, ollama, perplexity, openrou
 v1.1 (已完成):  B1 多轮 Quick Panel ✅ + B6 对话导出 ✅ + A4 输入区重设计 ✅
 v1.2 (已完成):  A1 主题系统 ✅ + A2 侧边栏重设计 ✅ + C1 右键菜单服务 ✅
 v1.5 (已完成):  B3 智能路由 ✅ + B4 Prompt 模板 ✅ + C4 多窗口 ✅
-v2.0 (进行中):  A3 气泡重设计 ✅ + A6 设置页现代化 ✅ | 待做: B5 RAG + D3 MCP + E1 DMG
+v2.0 (进行中):  A3 气泡重设计 ✅ + A6 设置页现代化 ✅ + D3 MCP ✅ | 待做: B5 RAG + E1 DMG
 ```
 
 ---
@@ -316,6 +321,26 @@ v2.0 (进行中):  A3 气泡重设计 ✅ + A6 设置页现代化 ✅ | 待做: 
 - 窗口自动偏移避免堆叠，关闭时自动清理引用
 - ChatListRow 右键菜单 "Open in New Window"
 
+### MCP 协议支持 (v2.0 D3)
+- 依赖: MCP Swift SDK (modelcontextprotocol/swift-sdk, v0.12.0)
+- MCPConfigStore: JSON 配置 (~/Library/Application Support/macai/mcp_servers.json)
+  - MCPServerConfig: name, command, args, env, isEnabled
+- MCPClientManager: @MainActor 单例，管理多 MCP 服务器连接
+  - 通过 Process + Pipe 启动子进程，StdioTransport 通信
+  - 自动发现 tools (listTools), 调用 tools (callTool)
+  - toolDefinitionsJSON(): 转换为 function-calling 格式
+- MCPToolRouter: @MainActor 单例，桥接 MCP 工具到聊天流
+  - toolsSystemPrompt(): 生成工具描述注入 system prompt
+  - parseToolCall(): 解析 AI 回复中的 <tool_call> 标签
+  - executeToolCall(): 调用 MCP 工具并返回结果
+  - 缓存机制: cachedToolsPrompt() 支持跨 actor 访问
+- Chat 集成:
+  - MessageManager.constructRequestMessages 注入工具 prompt
+  - 非流式/流式响应均支持自动检测 tool_call 并执行
+  - 工具调用显示 🔧, 结果显示 📋
+- 设置页: TabMCPServersView (状态点/开关/编辑/删除)
+- 启动时自动连接: macaiApp.onAppear → MCPClientManager.connectAll()
+
 ---
 
 ## Development Environment
@@ -342,4 +367,4 @@ Push 命令: `git push nexus main`
 
 ---
 
-*Last updated: 2026-04-05 — v1.5 完成, v2.0 A3+A6 完成*
+*Last updated: 2026-04-05 — v1.5 完成, v2.0 A3+A6+D3 完成*
