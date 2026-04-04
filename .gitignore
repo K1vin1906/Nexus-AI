@@ -41,3 +41,4 @@ DerivedData/
 macai.xcodeproj/project.xcworkspace/xcuserdata/*/UserInterfaceState.xcuserstate
 *.xcuserstate
 NexusAI-v1.0.0-mac.dmg
+*.dmg
