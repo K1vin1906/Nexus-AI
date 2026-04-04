@@ -10,6 +10,7 @@
 		0BA0FF405FC14D3FABF82621 /* APIServiceTemplateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA7767A135E47FFAB9E3289 /* APIServiceTemplateProvider.swift */; };
 		0E6BF47F5D74490F95504FF6 /* GeminiHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1475CF2DC44692A9E47B9A /* GeminiHandlerTests.swift */; };
 		1001F81047D94F5484238553 /* APIServiceTemplateAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774456B942348B88C536014 /* APIServiceTemplateAddView.swift */; };
+		146A455ABEDE66956726079D /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6A4245B7FEC02BE7A3C099 /* MCPToolRouter.swift */; };
 		14C347F1AC02E4CB09C7A2E8 /* IntentAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC63424E92900541247F1012 /* IntentAIService.swift */; };
 		16E55B88D2D449948BD6C60F /* APIServiceTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9230773084F7E92FFB3AD /* APIServiceTemplate.swift */; };
 		1E5A49F4850DBEA8A3973A5D /* PromptTemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837E4D36A489387A01378E27 /* PromptTemplatePickerView.swift */; };
@@ -120,6 +121,7 @@
 		6629491AA28FF6A806BFFC38 /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4944015921D6C87364A00A5 /* ChatWindowController.swift */; };
 		66FAA5C7B3254E69B2D3DC6A /* QuickActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1D7B7714B643E2B6A26D48 /* QuickActionsView.swift */; };
 		71124877BDC44CBFCEC9AA2C /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4944015921D6C87364A00A5 /* ChatWindowController.swift */; };
+		71C849E2900A24BF887B99E0 /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6A4245B7FEC02BE7A3C099 /* MCPToolRouter.swift */; };
 		7286422A8D58AE3DE9E66D46 /* MCPClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7E4375AF698AF2D7909961 /* MCPClientManager.swift */; };
 		7C2B9A4B2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B9A4A2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift */; };
 		7CEEFA33B4C841A2AC2BFBA2 /* APIServiceTemplateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D75E6599084CC8A6C8587C /* APIServiceTemplateProviderTests.swift */; };
@@ -149,6 +151,7 @@
 		F1A5458EAFF9958735D18668 /* SmartRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11D4ABD982B32BCB3EB8AF8 /* SmartRouter.swift */; };
 		F595CD3876D345D794C42AFF /* APIServiceTemplateAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B74289407745C983DD1294 /* APIServiceTemplateAddViewModel.swift */; };
 		F85D656ABA46473DBCE796A8 /* NexusTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8FC2083F94D19BBDF9B2A /* NexusTheme.swift */; };
+		FAEA40F2938BC02E16F76876 /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6A4245B7FEC02BE7A3C099 /* MCPToolRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +298,7 @@
 		94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrivacyModeManager.swift; path = macai/Utilities/PrivacyModeManager.swift; sourceTree = SOURCE_ROOT; };
 		959946F8AEBCF83AE52C0B2D /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechManager.swift; path = macai/Utilities/SpeechManager.swift; sourceTree = SOURCE_ROOT; };
 		A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatExportService.swift; sourceTree = "<group>"; };
+		AD6A4245B7FEC02BE7A3C099 /* MCPToolRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MCPToolRouter.swift; path = macai/MCP/MCPToolRouter.swift; sourceTree = SOURCE_ROOT; };
 		B06B4D2EA9EEF0C201BD1695 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClipboardMonitor.swift; path = macai/Utilities/ClipboardMonitor.swift; sourceTree = SOURCE_ROOT; };
 		B11D4ABD982B32BCB3EB8AF8 /* SmartRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SmartRouter.swift; path = macai/Utilities/SmartRouter.swift; sourceTree = SOURCE_ROOT; };
 		B2681BF4ED394B949A864169 /* PreviewFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewFileHelper.swift; sourceTree = "<group>"; };
@@ -550,6 +554,7 @@
 				6C7E4375AF698AF2D7909961 /* MCPClientManager.swift */,
 				8A144C59A60A7BE5D93E2323 /* MCPConfigStore.swift */,
 				05C04DA6A5535905D71C738F /* TabMCPServersView.swift */,
+				AD6A4245B7FEC02BE7A3C099 /* MCPToolRouter.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -904,6 +909,7 @@
 				7286422A8D58AE3DE9E66D46 /* MCPClientManager.swift in Sources */,
 				44334324810CA68A769EE38D /* MCPConfigStore.swift in Sources */,
 				5A4B46FFB24FB135B623CE38 /* TabMCPServersView.swift in Sources */,
+				146A455ABEDE66956726079D /* MCPToolRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -924,6 +930,7 @@
 				A26441A29E4B5A777ED21C70 /* MCPClientManager.swift in Sources */,
 				929D4FE996AC39EC82D6B270 /* MCPConfigStore.swift in Sources */,
 				3FB44F2682009FA04703E9F2 /* TabMCPServersView.swift in Sources */,
+				FAEA40F2938BC02E16F76876 /* MCPToolRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -941,6 +948,7 @@
 				397A412B81F4EFF22452AB47 /* MCPClientManager.swift in Sources */,
 				946F437C8BA2284F569A6E89 /* MCPConfigStore.swift in Sources */,
 				5DD14F6883FA1EC9A26758F7 /* TabMCPServersView.swift in Sources */,
+				71C849E2900A24BF887B99E0 /* MCPToolRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

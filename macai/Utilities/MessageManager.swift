@@ -41,6 +41,18 @@ class MessageManager: ObservableObject {
 
             switch result {
             case .success(let messageBody):
+                // D3: Check for MCP tool call in response
+                let toolRouter = MCPToolRouter.shared
+                if toolRouter.containsToolCall(messageBody) {
+                    self.handleMCPToolCall(
+                        messageBody: messageBody,
+                        chat: chat,
+                        contextSize: contextSize,
+                        completion: completion
+                    )
+                    return
+                }
+
                 chat.waitingForResponse = false
                 let partsEnvelope = encodePartsEnvelope(
                     from: (self.apiService as? GeminiHandler)?.consumeLastResponseParts(),
@@ -189,6 +201,19 @@ class MessageManager: ObservableObject {
 
                 // Save once at the end of the stream
                 try? self.viewContext.save()
+
+                // D3: Check for MCP tool call in streaming response
+                let toolRouter = MCPToolRouter.shared
+                if toolRouter.containsToolCall(accumulatedResponse) {
+                    self.handleMCPToolCallStreaming(
+                        messageBody: accumulatedResponse,
+                        chat: chat,
+                        contextSize: contextSize,
+                        completion: completion
+                    )
+                    return
+                }
+
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(
                         name: NSNotification.Name("ChatResponseCompleted"),
@@ -349,9 +374,14 @@ class MessageManager: ObservableObject {
         var messages: [[String: String]] = []
 
         if !AppConstants.openAiReasoningModels.contains(chat.gptModel) {
+            var systemContent = chat.systemMessage
+            // D3: Inject MCP tool descriptions if any are available
+            if let mcpToolsPrompt = MCPToolRouter.shared.cachedToolsPrompt() {
+                systemContent += mcpToolsPrompt
+            }
             messages.append([
                 "role": "system",
-                "content": chat.systemMessage,
+                "content": systemContent,
             ])
         }
         else {
@@ -393,6 +423,155 @@ class MessageManager: ObservableObject {
         }
 
         return messages
+    }
+
+    // MARK: - D3 MCP Tool Call Handling
+
+    @MainActor
+    private func handleMCPToolCallStreaming(
+        messageBody: String,
+        chat: ChatEntity,
+        contextSize: Int,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        let toolRouter = MCPToolRouter.shared
+
+        guard let toolCall = toolRouter.parseToolCall(from: messageBody) else {
+            completion(.success(()))
+            return
+        }
+
+        // Update the streamed message to show tool calling status
+        if let lastMsg = chat.lastMessage, !lastMsg.own {
+            let cleaned = toolRouter.cleanResponseForDisplay(messageBody)
+            let label = "🔧 Calling \(toolCall.server)::\(toolCall.tool)..."
+            lastMsg.body = cleaned.isEmpty ? label : cleaned + "\n\n" + label
+            lastMsg.timestamp = Date()
+            chat.objectWillChange.send()
+            try? viewContext.save()
+        }
+
+        // Execute tool call
+        Task { @MainActor in
+            do {
+                let result = try await toolRouter.executeToolCall(toolCall)
+                let toolResult = toolRouter.formatToolResult(
+                    server: toolCall.server,
+                    tool: toolCall.tool,
+                    result: result
+                )
+
+                // Add tool result to request messages
+                self.addNewMessageToRequestMessages(
+                    chat: chat, content: toolResult, role: "user"
+                )
+
+                // Show tool result in chat
+                let resultDisplay = "📋 Tool Result (\(toolCall.server)::\(toolCall.tool)):\n\(result)"
+                let toolResultEntity = MessageEntity(context: self.viewContext)
+                let seq = chat.nextSequence()
+                toolResultEntity.id = seq
+                if chat.managedObjectContext?.persistentStoreCoordinator?.managedObjectModel
+                    .entitiesByName["MessageEntity"]?.attributesByName["sequence"] != nil {
+                    toolResultEntity.sequence = seq
+                }
+                toolResultEntity.body = resultDisplay
+                toolResultEntity.timestamp = Date()
+                toolResultEntity.own = true
+                toolResultEntity.chat = chat
+                chat.addToMessages(toolResultEntity)
+                try? self.viewContext.save()
+                chat.objectWillChange.send()
+
+                // Re-send with tool result so AI can process it
+                self.sendMessageStream(
+                    toolResult,
+                    in: chat,
+                    contextSize: contextSize,
+                    completion: completion
+                )
+            } catch {
+                chat.waitingForResponse = false
+                let errorMsg = "❌ MCP tool call failed: \(error.localizedDescription)"
+                self.addMessageToChat(chat: chat, message: errorMsg)
+                try? self.viewContext.save()
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func handleMCPToolCall(
+        messageBody: String,
+        chat: ChatEntity,
+        contextSize: Int,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        let toolRouter = MCPToolRouter.shared
+
+        guard let toolCall = toolRouter.parseToolCall(from: messageBody) else {
+            // Failed to parse — just show the response as-is
+            chat.waitingForResponse = false
+            self.addMessageToChat(chat: chat, message: messageBody)
+            self.viewContext.saveWithRetry(attempts: 1)
+            completion(.success(()))
+            return
+        }
+
+        // Show AI's response (with tool call) as an assistant message
+        let displayText = toolRouter.cleanResponseForDisplay(messageBody)
+        let toolLabel = "🔧 Calling \(toolCall.server)::\(toolCall.tool)..."
+        let aiMessage = displayText.isEmpty ? toolLabel : displayText + "\n\n" + toolLabel
+        self.addMessageToChat(chat: chat, message: aiMessage)
+        self.addNewMessageToRequestMessages(chat: chat, content: messageBody, role: AppConstants.defaultRole)
+        self.viewContext.saveWithRetry(attempts: 1)
+        chat.objectWillChange.send()
+
+        // Execute tool call asynchronously
+        Task { @MainActor in
+            do {
+                let result = try await toolRouter.executeToolCall(toolCall)
+                let toolResult = toolRouter.formatToolResult(
+                    server: toolCall.server,
+                    tool: toolCall.tool,
+                    result: result
+                )
+
+                // Add tool result as a user message and send again
+                self.addNewMessageToRequestMessages(
+                    chat: chat, content: toolResult, role: "user"
+                )
+
+                // Save tool result as a message for display
+                let resultDisplay = "📋 Tool Result (\(toolCall.server)::\(toolCall.tool)):\n\(result)"
+                let toolResultEntity = MessageEntity(context: self.viewContext)
+                let seq = chat.nextSequence()
+                toolResultEntity.id = seq
+                if chat.managedObjectContext?.persistentStoreCoordinator?.managedObjectModel.entitiesByName["MessageEntity"]?.attributesByName["sequence"] != nil {
+                    toolResultEntity.sequence = seq
+                }
+                toolResultEntity.body = resultDisplay
+                toolResultEntity.timestamp = Date()
+                toolResultEntity.own = true
+                toolResultEntity.chat = chat
+                chat.addToMessages(toolResultEntity)
+                self.viewContext.saveWithRetry(attempts: 1)
+                chat.objectWillChange.send()
+
+                // Now re-send so AI can process the tool result
+                self.sendMessage(
+                    toolResult,
+                    in: chat,
+                    contextSize: contextSize,
+                    completion: completion
+                )
+            } catch {
+                chat.waitingForResponse = false
+                let errorMsg = "❌ MCP tool call failed: \(error.localizedDescription)"
+                self.addMessageToChat(chat: chat, message: errorMsg)
+                self.viewContext.saveWithRetry(attempts: 1)
+                completion(.failure(error))
+            }
+        }
     }
 
     // MARK: - Parts encoding helpers

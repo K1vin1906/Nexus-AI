@@ -219,6 +219,8 @@ class MCPClientManager: ObservableObject {
             }
         }
         self.allTools = tools
+        // Update cached tools prompt
+        _ = MCPToolRouter.shared.toolsSystemPrompt()
     }
 
     // MARK: - Call Tool

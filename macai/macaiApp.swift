@@ -402,6 +402,12 @@ struct macaiApp: App {
                 .accentColor(nexusAccentColor)
                 .onAppear {
                     QuickPanelController.shared.setup(viewContext: persistenceController.container.viewContext)
+                    NexusServiceProvider.register()
+
+                    // D3: Auto-connect MCP servers on launch
+                    Task {
+                        await MCPClientManager.shared.connectAll()
+                    }
                 }
 
         }
