@@ -12,11 +12,16 @@
 		0E6BF47F5D74490F95504FF6 /* GeminiHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1475CF2DC44692A9E47B9A /* GeminiHandlerTests.swift */; };
 		1001F81047D94F5484238553 /* APIServiceTemplateAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774456B942348B88C536014 /* APIServiceTemplateAddView.swift */; };
 		14C347F1AC02E4CB09C7A2E8 /* IntentAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC63424E92900541247F1012 /* IntentAIService.swift */; };
+		1506435783B8E926317F3FDC /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E94F56A07E8AFC0511D197 /* MCPToolRouter.swift */; };
+		15154C8AAC7202EA468AE989 /* MCPClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89304763867554BD835A2871 /* MCPClientManager.swift */; };
 		16E55B88D2D449948BD6C60F /* APIServiceTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9230773084F7E92FFB3AD /* APIServiceTemplate.swift */; };
+		1D9E4E858CC9B763B3A61EFC /* MCPClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89304763867554BD835A2871 /* MCPClientManager.swift */; };
 		1E5A49F4850DBEA8A3973A5D /* PromptTemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837E4D36A489387A01378E27 /* PromptTemplatePickerView.swift */; };
 		27B94ED3B3D2E351CA183E6C /* SmartRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11D4ABD982B32BCB3EB8AF8 /* SmartRouter.swift */; };
 		27E74C67A633B9D2AF285B73 /* PromptTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A3426E9E1651D64E5817FA /* PromptTemplate.swift */; };
+		2BDC4F69AD7663BE39EEFD12 /* MCPConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C704DACAECDB203014B763C /* MCPConfigStore.swift */; };
 		2DEB5B6E4EFE4D8C90FBA248 /* MacaiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F05D023BB34EF796C7F7D3 /* MacaiTextField.swift */; };
+		330C437B89BB9244A4229B7E /* TabMCPServersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC624B6FAF444F1F45B3B844 /* TabMCPServersView.swift */; };
 		33B54ACC9E9EF38AD23708C6 /* SummarizeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65242258A1BD9F5C20F10BE /* SummarizeIntent.swift */; };
 		37634C518BA20BAF95D40448 /* SmartRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11D4ABD982B32BCB3EB8AF8 /* SmartRouter.swift */; };
 		40D375E212F2451ABC09D333 /* QuickLookPreviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090CED78E6224CCB84778089 /* QuickLookPreviewer.swift */; };
@@ -120,9 +125,12 @@
 		7C2B9A4B2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B9A4A2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift */; };
 		7CEEFA33B4C841A2AC2BFBA2 /* APIServiceTemplateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D75E6599084CC8A6C8587C /* APIServiceTemplateProviderTests.swift */; };
 		889A48A1874F2F2187BE0A29 /* PromptTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A3426E9E1651D64E5817FA /* PromptTemplate.swift */; };
+		8E2D4D06B7D524A273310FE6 /* TabMCPServersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC624B6FAF444F1F45B3B844 /* TabMCPServersView.swift */; };
 		976341838E1AB6BC294BB3AE /* NexusServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47241029F09863F5956CDEF /* NexusServiceProvider.swift */; };
 		9A040A4C76354F309DF6CB6F /* NotificationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14461D2B9E6A48DEB427E5F1 /* NotificationPresenter.swift */; };
+		A12941B891F70A6FAC1A1DE4 /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E94F56A07E8AFC0511D197 /* MCPToolRouter.swift */; };
 		A4294568AEFBD8488230CC1F /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4944015921D6C87364A00A5 /* ChatWindowController.swift */; };
+		AC3740579957DF11BD56E64E /* MCPClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89304763867554BD835A2871 /* MCPClientManager.swift */; };
 		B2304350909BF0B431EB5FAE /* PromptTemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837E4D36A489387A01378E27 /* PromptTemplatePickerView.swift */; };
 		B2E47C1C2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E47C1B2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift */; };
 		B2E47C1E2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E47C1D2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift */; };
@@ -135,14 +143,18 @@
 		C731619AB99A434E92FA5748 /* ChatExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */; };
 		C781427CB6AD762192B969B4 /* NexusServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47241029F09863F5956CDEF /* NexusServiceProvider.swift */; };
 		CC35436480B9710D9A0F736B /* WebSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B648F7B945E9F881E7537C /* WebSearchService.swift */; };
+		CEDB4D79BDF58D856167A3BD /* TabMCPServersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC624B6FAF444F1F45B3B844 /* TabMCPServersView.swift */; };
 		D0404097AE4A8BD6317F7C49 /* QuickPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B74E108038FC8DFC1E3413 /* QuickPanelController.swift */; };
 		D2544C5BA68F98D07AD542A3 /* VoiceInputButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767346AB9C723925C5457680 /* VoiceInputButton.swift */; };
 		D96F4DAEA85BF9A6200336F7 /* PrivacyModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */; };
 		DFE34FDA9DCA384969E5ECD1 /* AskAIIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBD47AB9E0C914BE3CE2F60 /* AskAIIntent.swift */; };
 		E12F358385C44407B2AAAF94 /* PreviewFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2681BF4ED394B949A864169 /* PreviewFileHelper.swift */; };
+		E9D64C75AB37A7F205C0997B /* MCPToolRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E94F56A07E8AFC0511D197 /* MCPToolRouter.swift */; };
+		EB874550A405AD52D29ADCB7 /* MCPConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C704DACAECDB203014B763C /* MCPConfigStore.swift */; };
 		F1A5458EAFF9958735D18668 /* SmartRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11D4ABD982B32BCB3EB8AF8 /* SmartRouter.swift */; };
 		F595CD3876D345D794C42AFF /* APIServiceTemplateAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B74289407745C983DD1294 /* APIServiceTemplateAddViewModel.swift */; };
 		F85D656ABA46473DBCE796A8 /* NexusTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8FC2083F94D19BBDF9B2A /* NexusTheme.swift */; };
+		FB5E4B2B94C4CD0318E1AAED /* MCPConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C704DACAECDB203014B763C /* MCPConfigStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,7 +195,9 @@
 		16D75E6599084CC8A6C8587C /* APIServiceTemplateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTemplateProviderTests.swift; sourceTree = "<group>"; };
 		1D1475CF2DC44692A9E47B9A /* GeminiHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiHandlerTests.swift; sourceTree = "<group>"; };
 		25B74289407745C983DD1294 /* APIServiceTemplateAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTemplateAddViewModel.swift; sourceTree = "<group>"; };
+		3C704DACAECDB203014B763C /* MCPConfigStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MCPConfigStore.swift; path = macai/MCP/MCPConfigStore.swift; sourceTree = SOURCE_ROOT; };
 		3EA7767A135E47FFAB9E3289 /* APIServiceTemplateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTemplateProvider.swift; sourceTree = "<group>"; };
+		46E94F56A07E8AFC0511D197 /* MCPToolRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MCPToolRouter.swift; path = macai/MCP/MCPToolRouter.swift; sourceTree = SOURCE_ROOT; };
 		4A0BCBBB2D5199140033AB96 /* ButtonWithStatusIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithStatusIndicator.swift; sourceTree = "<group>"; };
 		4A0E02842D0F571000D2FAF3 /* PerplexityHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerplexityHandler.swift; sourceTree = "<group>"; };
 		4A146A012F103E3E004249A2 /* DocumentAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAttachment.swift; sourceTree = "<group>"; };
@@ -283,6 +297,7 @@
 		7C2B9A4A2F1E4B1F00D1A111 /* DatabaseMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseMigrationTests.swift; sourceTree = "<group>"; };
 		7E9696501A3843E4A2D9926B /* APIServiceTemplates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = APIServiceTemplates.json; sourceTree = "<group>"; };
 		837E4D36A489387A01378E27 /* PromptTemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PromptTemplatePickerView.swift; path = macai/UI/Components/PromptTemplatePickerView.swift; sourceTree = SOURCE_ROOT; };
+		89304763867554BD835A2871 /* MCPClientManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MCPClientManager.swift; path = macai/MCP/MCPClientManager.swift; sourceTree = SOURCE_ROOT; };
 		94724B1C8F9095DEED057B52 /* PrivacyModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrivacyModeManager.swift; path = macai/Utilities/PrivacyModeManager.swift; sourceTree = SOURCE_ROOT; };
 		959946F8AEBCF83AE52C0B2D /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechManager.swift; path = macai/Utilities/SpeechManager.swift; sourceTree = SOURCE_ROOT; };
 		A2759FEC36604BD1A3D18EA1 /* ChatExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatExportService.swift; sourceTree = "<group>"; };
@@ -292,6 +307,7 @@
 		B2E47C1B2CF90E5C00ABCD12 /* OpenAIHandlerBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIHandlerBase.swift; sourceTree = "<group>"; };
 		B2E47C1D2CF90E5C00ABCD12 /* OpenAIResponsesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIResponsesHandler.swift; sourceTree = "<group>"; };
 		B6B648F7B945E9F881E7537C /* WebSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WebSearchService.swift; path = macai/Utilities/WebSearchService.swift; sourceTree = SOURCE_ROOT; };
+		BC624B6FAF444F1F45B3B844 /* TabMCPServersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TabMCPServersView.swift; path = macai/UI/Preferences/TabMCPServersView.swift; sourceTree = SOURCE_ROOT; };
 		BEFF573F6F9A453BAFF2C3A5 /* PDFHandlingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFHandlingTests.swift; sourceTree = "<group>"; };
 		BFD549EF9DCA02F6C701458B /* QuickInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickInputView.swift; path = macai/UI/QuickPanel/QuickInputView.swift; sourceTree = SOURCE_ROOT; };
 		C4944015921D6C87364A00A5 /* ChatWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatWindowController.swift; path = macai/UI/Chat/ChatWindowController.swift; sourceTree = SOURCE_ROOT; };
@@ -540,6 +556,10 @@
 				837E4D36A489387A01378E27 /* PromptTemplatePickerView.swift */,
 				C4944015921D6C87364A00A5 /* ChatWindowController.swift */,
 				B6B648F7B945E9F881E7537C /* WebSearchService.swift */,
+				89304763867554BD835A2871 /* MCPClientManager.swift */,
+				3C704DACAECDB203014B763C /* MCPConfigStore.swift */,
+				46E94F56A07E8AFC0511D197 /* MCPToolRouter.swift */,
+				BC624B6FAF444F1F45B3B844 /* TabMCPServersView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -659,6 +679,7 @@
 				4A7E1BDA29C910F900E57DC2 /* Sparkle */,
 				4A471B852C29C56800C66926 /* SwiftMath */,
 				4A2842482C87014800E5C920 /* KeychainAccess */,
+				6FCE592241C946E9B7660482 /* MCP */,
 			);
 			productName = macai;
 			productReference = 4A399C9529BC8FEF00E98796 /* Nexus AI.app */;
@@ -738,6 +759,7 @@
 				4A7E1BD929C910F800E57DC2 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				4A471B842C29C56800C66926 /* XCRemoteSwiftPackageReference "SwiftMath" */,
 				4A2842472C87014800E5C920 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				73CDF5E0EA5F470084376E48 /* XCRemoteSwiftPackageReference "swift-sdk" */,
 			);
 			productRefGroup = 4A399C9629BC8FEF00E98796 /* Products */;
 			projectDirPath = "";
@@ -890,6 +912,10 @@
 				B3924B26BA295FC85AACE2E2 /* PromptTemplatePickerView.swift in Sources */,
 				71124877BDC44CBFCEC9AA2C /* ChatWindowController.swift in Sources */,
 				CC35436480B9710D9A0F736B /* WebSearchService.swift in Sources */,
+				1D9E4E858CC9B763B3A61EFC /* MCPClientManager.swift in Sources */,
+				EB874550A405AD52D29ADCB7 /* MCPConfigStore.swift in Sources */,
+				E9D64C75AB37A7F205C0997B /* MCPToolRouter.swift in Sources */,
+				CEDB4D79BDF58D856167A3BD /* TabMCPServersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -908,6 +934,10 @@
 				1E5A49F4850DBEA8A3973A5D /* PromptTemplatePickerView.swift in Sources */,
 				6629491AA28FF6A806BFFC38 /* ChatWindowController.swift in Sources */,
 				4E12458C80F77425E578663F /* WebSearchService.swift in Sources */,
+				AC3740579957DF11BD56E64E /* MCPClientManager.swift in Sources */,
+				FB5E4B2B94C4CD0318E1AAED /* MCPConfigStore.swift in Sources */,
+				A12941B891F70A6FAC1A1DE4 /* MCPToolRouter.swift in Sources */,
+				330C437B89BB9244A4229B7E /* TabMCPServersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +953,10 @@
 				B2304350909BF0B431EB5FAE /* PromptTemplatePickerView.swift in Sources */,
 				A4294568AEFBD8488230CC1F /* ChatWindowController.swift in Sources */,
 				0DAB47AA86B6F7D95C6E3BEC /* WebSearchService.swift in Sources */,
+				15154C8AAC7202EA468AE989 /* MCPClientManager.swift in Sources */,
+				2BDC4F69AD7663BE39EEFD12 /* MCPConfigStore.swift in Sources */,
+				1506435783B8E926317F3FDC /* MCPToolRouter.swift in Sources */,
+				8E2D4D06B7D524A273310FE6 /* TabMCPServersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1368,6 +1402,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		73CDF5E0EA5F470084376E48 /* XCRemoteSwiftPackageReference "swift-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/modelcontextprotocol/swift-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.11.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1395,6 +1437,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4A7E1BD929C910F800E57DC2 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		6FCE592241C946E9B7660482 /* MCP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73CDF5E0EA5F470084376E48 /* XCRemoteSwiftPackageReference "swift-sdk" */;
+			productName = MCP;
 		};
 /* End XCSwiftPackageProductDependency section */
 

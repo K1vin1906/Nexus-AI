@@ -366,6 +366,7 @@ struct macaiApp: App {
         (NexusAccentColor(rawValue: accentColorRaw) ?? .purple).color
     }
     @Environment(\.scenePhase) private var scenePhase
+    @State private var mcpConnected = false
     private let updaterController: SPUStandardUpdaterController
     let persistenceController = PersistenceController.shared
 
@@ -389,6 +390,13 @@ struct macaiApp: App {
             updaterDelegate: nil,
             userDriverDelegate: nil
         )
+
+        // D3: Auto-connect MCP servers after a short delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            Task { @MainActor in
+                await MCPClientManager.shared.connectAll()
+            }
+        }
 
     }
 
