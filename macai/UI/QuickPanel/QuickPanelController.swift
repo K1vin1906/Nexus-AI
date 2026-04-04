@@ -128,7 +128,7 @@ class QuickPanelController: NSObject, ObservableObject {
         }
     }
 
-    private func showPanel() {
+    func showPanel() {
         guard let viewContext = viewContext else { return }
 
         if quickPanelWindow == nil {

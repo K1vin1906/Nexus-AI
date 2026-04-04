@@ -15,6 +15,13 @@ extension Color {
     static let nexusCyan = Color(red: 78/255, green: 205/255, blue: 196/255)
     static let nexusPurpleLight = Color(red: 139/255, green: 124/255, blue: 247/255)
     static let nexusCyanLight = Color(red: 120/255, green: 220/255, blue: 212/255)
+
+    /// Nexus AI gradient: purple → cyan
+    static let nexusGradient = LinearGradient(
+        colors: [.nexusPurple, .nexusCyan],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 }
 
 // MARK: - Accent Color Options
@@ -55,6 +62,127 @@ enum NexusAccentColor: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Semantic Color System
+
+struct NexusTheme {
+
+    // MARK: Sidebar
+    struct Sidebar {
+        static func background(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 26/255, green: 26/255, blue: 46/255)   // #1A1A2E
+                : Color(red: 245/255, green: 243/255, blue: 255/255) // #F5F3FF
+        }
+        static func rowHover(_ scheme: ColorScheme) -> Color {
+            Color.nexusPurple.opacity(scheme == .dark ? 0.15 : 0.08)
+        }
+        static func rowActive(_ scheme: ColorScheme) -> Color {
+            Color.nexusPurple.opacity(scheme == .dark ? 0.35 : 0.18)
+        }
+        static func sectionHeader(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color.white.opacity(0.45)
+                : Color.black.opacity(0.45)
+        }
+    }
+
+    // MARK: Chat Area
+    struct Chat {
+        static func background(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 22/255, green: 22/255, blue: 42/255)   // #16162A
+                : .white
+        }
+        static func userBubble(_ scheme: ColorScheme) -> Color {
+            Color.nexusPurple.opacity(scheme == .dark ? 0.25 : 0.12)
+        }
+        static func assistantBubble(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 35/255, green: 35/255, blue: 64/255)   // #232340
+                : Color(red: 240/255, green: 238/255, blue: 255/255) // #F0EEFF
+        }
+        static func inputBackground(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 30/255, green: 30/255, blue: 58/255)   // #1E1E3A
+                : Color(red: 248/255, green: 247/255, blue: 255/255) // #F8F7FF
+        }
+        static func inputBorder(_ scheme: ColorScheme) -> Color {
+            Color.nexusPurple.opacity(scheme == .dark ? 0.3 : 0.2)
+        }
+    }
+
+    // MARK: Text Colors
+    struct Text {
+        static func primary(_ scheme: ColorScheme) -> Color {
+            scheme == .dark ? .white : Color(red: 26/255, green: 26/255, blue: 46/255)
+        }
+        static func secondary(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color.white.opacity(0.6)
+                : Color.black.opacity(0.55)
+        }
+        static func tertiary(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color.white.opacity(0.35)
+                : Color.black.opacity(0.35)
+        }
+    }
+
+    // MARK: Toolbar / Window Chrome
+    struct Chrome {
+        static func divider(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color.white.opacity(0.08)
+                : Color.black.opacity(0.08)
+        }
+        static func toolbarBackground(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 26/255, green: 26/255, blue: 46/255).opacity(0.85)
+                : Color(red: 245/255, green: 243/255, blue: 255/255).opacity(0.85)
+        }
+    }
+
+    // MARK: Quick Panel
+    struct QuickPanel {
+        static func background(_ scheme: ColorScheme) -> Color {
+            scheme == .dark
+                ? Color(red: 28/255, green: 28/255, blue: 52/255).opacity(0.97)
+                : Color(red: 253/255, green: 252/255, blue: 255/255).opacity(0.97)
+        }
+    }
+
+    // MARK: Provider Icon Tint
+    static func providerColor(for type: String?) -> Color {
+        switch type?.lowercased() {
+        case "gemini":       return Color(red: 66/255, green: 133/255, blue: 244/255)
+        case "claude":       return Color(red: 217/255, green: 119/255, blue: 87/255)
+        case "deepseek":     return Color(red: 77/255, green: 107/255, blue: 254/255)
+        case "ollama":       return .white
+        case "openai-responses", "chatgpt":
+                             return Color(red: 16/255, green: 163/255, blue: 127/255)
+        case "openrouter":   return Color(red: 100/255, green: 103/255, blue: 242/255)
+        case "perplexity":   return Color(red: 32/255, green: 128/255, blue: 141/255)
+        case "xai":          return .white
+        default:             return .nexusPurple
+        }
+    }
+
+    /// Returns a compact SF Symbol name for each provider type
+    static func providerIcon(for type: String?) -> String {
+        switch type?.lowercased() {
+        case "gemini":                       return "diamond.fill"
+        case "claude":                       return "brain.head.profile.fill"
+        case "deepseek":                     return "magnifyingglass.circle.fill"
+        case "ollama":                       return "desktopcomputer"
+        case "openai-responses", "chatgpt":  return "circle.hexagonpath.fill"
+        case "openrouter":                   return "arrow.triangle.branch"
+        case "perplexity":                   return "globe"
+        case "xai":                          return "bolt.fill"
+        default:                             return "cpu.fill"
+        }
+    }
+}
+
 // MARK: - Theme Manager
 
 class NexusThemeManager: ObservableObject {
@@ -73,13 +201,9 @@ class NexusThemeManager: ObservableObject {
         accentColor.color
     }
 
-    /// Apply accent color globally via NSAppearance
     func applyAccentColor() {
-        let color = accentColor.color
-        let nsColor = NSColor(color)
-        // Set the global accent color for the app
+        let nsColor = NSColor(accentColor.color)
         UserDefaults.standard.set(nsColor.hexString, forKey: "AppleAccentColor_Custom")
-        // Post notification so views can update
         NotificationCenter.default.post(name: .nexusAccentColorChanged, object: nil)
     }
 
@@ -91,6 +215,8 @@ class NexusThemeManager: ObservableObject {
 extension Notification.Name {
     static let nexusAccentColorChanged = Notification.Name("nexusAccentColorChanged")
 }
+
+// MARK: - NSColor Hex Support
 
 extension NSColor {
     var hexString: String {
@@ -105,5 +231,27 @@ extension NSColor {
 extension Color {
     var hexString: String {
         NSColor(self).hexString
+    }
+}
+
+// MARK: - Convenience View Modifiers
+
+extension View {
+    /// Apply the Nexus brand accent tint
+    func nexusAccent() -> some View {
+        self.tint(.nexusPurple)
+    }
+
+    /// Nexus-styled rounded card background
+    func nexusCard(_ scheme: ColorScheme, cornerRadius: CGFloat = 12) -> some View {
+        self
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(NexusTheme.Chat.assistantBubble(scheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .strokeBorder(NexusTheme.Chrome.divider(scheme), lineWidth: 0.5)
+            )
     }
 }

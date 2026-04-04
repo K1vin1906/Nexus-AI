@@ -69,24 +69,62 @@ struct ChatListView: View {
         }
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var pinnedChats: [ChatEntity] {
+        filteredChats.filter { $0.isPinned }
+    }
+
+    private var recentChats: [ChatEntity] {
+        filteredChats.filter { !$0.isPinned }
+    }
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(filteredChats, id: \.objectID) { chat in
-                        ChatListRow(
-                            chat: chat,
-                            showsAttentionIndicator: attentionStore.contains(chat.id),
-                            selectedChat: $selectedChat,
-                            viewContext: viewContext,
-                            searchText: debouncedSearchText
-                        )
-                        .id(chat.objectID)
+                LazyVStack(alignment: .leading, spacing: 4) {
+                    // Pinned section
+                    if !pinnedChats.isEmpty {
+                        sectionHeader("Pinned", icon: "pin.fill")
+                        ForEach(pinnedChats, id: \.objectID) { chat in
+                            ChatListRow(
+                                chat: chat,
+                                showsAttentionIndicator: attentionStore.contains(chat.id),
+                                selectedChat: $selectedChat,
+                                viewContext: viewContext,
+                                searchText: debouncedSearchText
+                            )
+                            .id(chat.objectID)
+                        }
+
+                        if !recentChats.isEmpty {
+                            Divider()
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 8)
+                        }
+                    }
+
+                    // Recent section
+                    if !recentChats.isEmpty {
+                        if !pinnedChats.isEmpty {
+                            sectionHeader("Recent", icon: "clock")
+                        }
+                        ForEach(recentChats, id: \.objectID) { chat in
+                            ChatListRow(
+                                chat: chat,
+                                showsAttentionIndicator: attentionStore.contains(chat.id),
+                                selectedChat: $selectedChat,
+                                viewContext: viewContext,
+                                searchText: debouncedSearchText
+                            )
+                            .id(chat.objectID)
+                        }
                     }
                 }
-                .padding(12)
+                .padding(10)
             }
         }
+        .background(NexusTheme.Sidebar.background(colorScheme))
         .onChange(of: searchText) { newValue in
             debounceTimer?.invalidate()
             
@@ -100,5 +138,19 @@ struct ChatListView: View {
         .onDisappear {
             debounceTimer?.invalidate()
         }
+    }
+
+    @ViewBuilder
+    private func sectionHeader(_ title: String, icon: String) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 10, weight: .semibold))
+            Text(title.uppercased())
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+        }
+        .foregroundColor(NexusTheme.Sidebar.sectionHeader(colorScheme))
+        .padding(.horizontal, 8)
+        .padding(.top, 8)
+        .padding(.bottom, 2)
     }
 }

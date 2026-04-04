@@ -55,7 +55,9 @@ struct ChatMessagesView: View {
                                 isStreaming: isStreaming,
                                 isLatestMessage: messageEntity.objectID == chatViewModel.sortedMessages.last?.objectID,
                                 reasoningDuration: reasoningDurations[messageEntity.objectID] ?? storedDuration,
-                                isActiveReasoning: messageEntity.objectID == activeReasoningMessageID
+                                isActiveReasoning: messageEntity.objectID == activeReasoningMessageID,
+                                providerType: chat.apiService?.type,
+                                messageTimestamp: messageEntity.timestamp
                             )
                             ChatBubbleView(content: bubbleContent, message: messageEntity, searchText: $searchText, currentSearchOccurrence: chatViewModel.currentSearchOccurrence)
                                 .id(messageEntity.objectID)
@@ -72,7 +74,9 @@ struct ChatMessagesView: View {
                             isStreaming: isStreaming,
                             isLatestMessage: false,
                             reasoningDuration: nil,
-                            isActiveReasoning: false
+                            isActiveReasoning: false,
+                            providerType: chat.apiService?.type,
+                            messageTimestamp: nil
                         )
 
                         ChatBubbleView(content: bubbleContent, searchText: $searchText)
@@ -88,7 +92,9 @@ struct ChatMessagesView: View {
                             isStreaming: isStreaming,
                             isLatestMessage: true,
                             reasoningDuration: nil,
-                            isActiveReasoning: false
+                            isActiveReasoning: false,
+                            providerType: chat.apiService?.type,
+                            messageTimestamp: nil
                         )
 
                         ChatBubbleView(content: bubbleContent, searchText: $searchText)

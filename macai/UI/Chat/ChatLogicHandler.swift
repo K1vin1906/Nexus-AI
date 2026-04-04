@@ -82,6 +82,9 @@ class ChatLogicHandler: ObservableObject {
         saveNewMessageInStore(with: messageBody)
         userIsScrolling = false
 
+        // B3: Smart Routing — auto-switch provider if enabled
+        applySmartRouting(for: messageText, hasImages: !attachedImages.isEmpty)
+
         if chat.apiService?.useStreamResponse ?? false {
             sendStreamMessage(messageBody)
         } else {
@@ -272,5 +275,51 @@ class ChatLogicHandler: ObservableObject {
 
     private func supportsPDFUploads() -> Bool {
         return chat.apiService?.pdfUploadsAllowed == true
+    }
+
+    // MARK: - B3 Smart Routing
+
+    private func applySmartRouting(for text: String, hasImages: Bool) {
+        let router = SmartRouter.shared
+        guard router.isEnabled else { return }
+
+        let category = router.classify(text, hasImages: hasImages)
+        guard category != .general else { return }
+
+        // Fetch all available API services
+        let fetchRequest = APIServiceEntity.fetchRequest()
+        guard let services = try? viewContext.fetch(fetchRequest) as? [APIServiceEntity],
+              !services.isEmpty
+        else { return }
+
+        if let betterService = router.resolve(
+            category: category,
+            availableServices: services,
+            currentService: chat.apiService
+        ) {
+            let previousName = chat.apiService?.name ?? "Unknown"
+            chat.apiService = betterService
+            chat.gptModel = betterService.model ?? AppConstants.defaultModel(for: betterService.type)
+            chat.objectWillChange.send()
+            try? viewContext.save()
+
+            // Recreate message manager for new provider
+            NotificationCenter.default.post(
+                name: NSNotification.Name("RecreateMessageManager"),
+                object: nil,
+                userInfo: ["chatId": chat.id as Any]
+            )
+
+            // Notify UI about the routing decision
+            NotificationCenter.default.post(
+                name: .smartRouteApplied,
+                object: nil,
+                userInfo: [
+                    "category": category.displayName,
+                    "from": previousName,
+                    "to": betterService.name ?? "Unknown"
+                ]
+            )
+        }
     }
 }

@@ -18,7 +18,8 @@ struct ChatListRow: View, Equatable {
         lhs.isPinned == rhs.isPinned &&
         lhs.showsAttentionIndicator == rhs.showsAttentionIndicator &&
         (lhs.selectedChat?.objectID == rhs.selectedChat?.objectID) &&
-        lhs.searchText == rhs.searchText
+        lhs.searchText == rhs.searchText &&
+        lhs.providerType == rhs.providerType
     }
     let chat: ChatEntity
     let chatObjectID: NSManagedObjectID
@@ -29,6 +30,7 @@ struct ChatListRow: View, Equatable {
     let lastMessageTimestamp: Date
     let updatedDate: Date?
     let showsAttentionIndicator: Bool
+    let providerType: String?
     @Binding var selectedChat: ChatEntity?
     let viewContext: NSManagedObjectContext
     let searchText: String
@@ -50,6 +52,7 @@ struct ChatListRow: View, Equatable {
         self.lastMessageTimestamp = chat.lastMessage?.timestamp ?? .distantPast
         self.updatedDate = chat.updatedDate
         self.showsAttentionIndicator = showsAttentionIndicator
+        self.providerType = chat.apiService?.type
         self._selectedChat = selectedChat
         self.viewContext = viewContext
         self.searchText = searchText
@@ -82,7 +85,8 @@ struct ChatListRow: View, Equatable {
             showsAttentionIndicator: showsAttentionIndicator,
             isPinned: isPinned,
             isActive: isActive,
-            searchText: searchText
+            searchText: searchText,
+            providerType: providerType
         )
         .contextMenu {
             Button(action: { 
@@ -104,6 +108,13 @@ struct ChatListRow: View, Equatable {
             Button(action: { clearChat(chat) }) {
                 Label("Clear Chat", systemImage: "eraser")
             }
+            
+            Button(action: {
+                ChatWindowManager.shared.openChat(chat, viewContext: viewContext)
+            }) {
+                Label("Open in New Window", systemImage: "macwindow.badge.plus")
+            }
+            
             Divider()
             Button(action: { deleteChat(chat) }) {
                 Label("Delete", systemImage: "trash")

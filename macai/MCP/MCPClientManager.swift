@@ -182,20 +182,31 @@ class MCPClientManager: ObservableObject {
     private var connections: [UUID: MCPServerConnection] = [:]
     private let configStore = MCPConfigStore.shared
 
-    private init() {}
+    private init() {
+        // Auto-connect after a delay when singleton is first accessed
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            Task { @MainActor in
+                await self?.connectAll()
+            }
+        }
+    }
 
     // MARK: - Connect All Enabled Servers
 
     func connectAll() async {
         let servers = configStore.enabledServers
-        os_log("[MCP] connectAll: %d enabled servers", log: mcpLog, type: .info, servers.count)
+        // Debug: write to file to confirm execution
+        let debugMsg = "[MCP] connectAll called at \(Date()) with \(servers.count) servers: \(servers.map { "\($0.name)=\($0.command)" })\n"
+        try? debugMsg.write(toFile: "/tmp/nexus_mcp_debug.log", atomically: true, encoding: .utf8)
         for server in servers {
             await connect(server: server)
         }
     }
 
     func connect(server: MCPServerConfig) async {
-        os_log("[MCP] connect called for server '%{public}@', command='%{public}@'", log: mcpLog, type: .fault, server.name, server.command)
+        // Debug file
+        let msg = "[MCP] connect called for '\(server.name)' command='\(server.command)' args=\(server.args)\n"
+        try? msg.write(toFile: "/tmp/nexus_mcp_connect.log", atomically: true, encoding: .utf8)
         let connection = MCPServerConnection(config: server)
         connections[server.id] = connection
         connectionStates[server.id] = .connecting

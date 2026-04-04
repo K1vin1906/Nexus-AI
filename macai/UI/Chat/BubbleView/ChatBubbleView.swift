@@ -36,12 +36,14 @@ struct ChatBubbleContent: Equatable {
     let isLatestMessage: Bool
     let reasoningDuration: TimeInterval?
     let isActiveReasoning: Bool
+    let providerType: String?
+    let messageTimestamp: Date?
 
     static func == (lhs: ChatBubbleContent, rhs: ChatBubbleContent) -> Bool {
         return lhs.message == rhs.message && lhs.own == rhs.own && lhs.waitingForResponse == rhs.waitingForResponse
             && lhs.systemMessage == rhs.systemMessage && lhs.isStreaming == rhs.isStreaming
             && lhs.isLatestMessage == rhs.isLatestMessage && lhs.reasoningDuration == rhs.reasoningDuration
-            && lhs.isActiveReasoning == rhs.isActiveReasoning
+            && lhs.isActiveReasoning == rhs.isActiveReasoning && lhs.providerType == rhs.providerType
     }
 }
 
@@ -55,11 +57,6 @@ struct ChatBubbleView: View, Equatable {
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.managedObjectContext) private var viewContext
-    private let outgoingBubbleColorLight = Color(red: 0.92, green: 0.92, blue: 0.92)
-    private let outgoingBubbleColorDark = Color(red: 0.3, green: 0.3, blue: 0.3)
-    private let incomingBubbleColorLight = Color(.white).opacity(0)
-    private let incomingBubbleColorDark = Color(.white).opacity(0)
-    private let incomingLabelColor = NSColor.labelColor
     @State private var isHovered = false
     @State private var showingDeleteConfirmation = false
     @State private var isCopied = false
@@ -68,6 +65,25 @@ struct ChatBubbleView: View, Equatable {
 
     private var effectiveFontSize: Double {
         chatFontSize
+    }
+
+    private var providerAvatar: some View {
+        ZStack {
+            Circle()
+                .fill(NexusTheme.providerColor(for: content.providerType).opacity(0.15))
+                .frame(width: 28, height: 28)
+            Image(systemName: NexusTheme.providerIcon(for: content.providerType))
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(NexusTheme.providerColor(for: content.providerType))
+        }
+        .padding(.top, 6)
+    }
+
+    private var timestampText: String? {
+        guard let ts = content.messageTimestamp else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: ts)
     }
 
     static func == (lhs: ChatBubbleView, rhs: ChatBubbleView) -> Bool {
@@ -79,11 +95,14 @@ struct ChatBubbleView: View, Equatable {
         let attachments = prefetchedElements.map(extractAttachments) ?? []
 
         VStack {
-            HStack {
+            HStack(alignment: .top, spacing: 8) {
                 if content.own {
                     Color.clear
                         .frame(width: 80)
                     Spacer()
+                } else if !content.systemMessage {
+                    // Provider avatar for assistant messages
+                    providerAvatar
                 }
                 VStack(alignment: content.own ? .trailing : .leading, spacing: 6) {
                     if content.own,
@@ -204,16 +223,16 @@ struct ChatBubbleView: View, Equatable {
                 )
             }
         }
-        .foregroundColor(Color(content.own ? incomingLabelColor : incomingLabelColor))
+        .foregroundColor(.primary)
         .multilineTextAlignment(.leading)
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(
             content.systemMessage
                 ? (color != nil ? (Color(hex: color!) ?? Color(NSColor.systemGray)) : Color(NSColor.systemGray)).opacity(0.6)
-                : colorScheme == .dark
-                    ? (content.own ? outgoingBubbleColorDark : incomingBubbleColorDark)
-                    : (content.own ? outgoingBubbleColorLight : incomingBubbleColorLight)
+                : content.own
+                    ? NexusTheme.Chat.userBubble(colorScheme)
+                    : NexusTheme.Chat.assistantBubble(colorScheme)
         )
         .cornerRadius(16)
     }
@@ -429,6 +448,13 @@ struct ChatBubbleView: View, Equatable {
 
     private var toolbarContent: some View {
         HStack(spacing: 12) {
+            // Timestamp
+            if let ts = timestampText {
+                Text(ts)
+                    .font(.system(size: 10))
+                    .foregroundColor(NexusTheme.Text.tertiary(colorScheme))
+            }
+
             let isImageOnlyMessage = AttachmentParser.stripAttachments(from: content.message).isEmpty
                 && !AttachmentParser.extractImageUUIDs(from: content.message).isEmpty
                 && AttachmentParser.extractFileUUIDs(from: content.message).isEmpty

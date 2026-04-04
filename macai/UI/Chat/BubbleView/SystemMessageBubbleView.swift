@@ -18,7 +18,9 @@ struct SystemMessageBubbleView: View {
                 isStreaming: false,
                 isLatestMessage: false,
                 reasoningDuration: nil,
-                isActiveReasoning: false
+                isActiveReasoning: false,
+                providerType: nil,
+                messageTimestamp: nil
             ),
             color: color,
             onEdit: {

@@ -366,11 +366,13 @@ struct macaiApp: App {
         (NexusAccentColor(rawValue: accentColorRaw) ?? .purple).color
     }
     @Environment(\.scenePhase) private var scenePhase
+    @State private var mcpConnected = false
 
     private let updaterController: SPUStandardUpdaterController
     let persistenceController = PersistenceController.shared
 
     init() {
+        try? "init START \(Date())\n".write(toFile: "/tmp/nexus_init_start.log", atomically: true, encoding: .utf8)
         ValueTransformer.setValueTransformer(
             RequestMessagesTransformer(),
             forName: RequestMessagesTransformer.name
@@ -391,6 +393,14 @@ struct macaiApp: App {
             userDriverDelegate: nil
         )
 
+        // D3: Auto-connect MCP servers after a short delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            try? "asyncAfter FIRED \(Date())\n".write(toFile: "/tmp/nexus_async.log", atomically: true, encoding: .utf8)
+            Task { @MainActor in
+                await MCPClientManager.shared.connectAll()
+            }
+        }
+
     }
 
     var body: some Scene {
@@ -403,13 +413,6 @@ struct macaiApp: App {
                 .onAppear {
                     QuickPanelController.shared.setup(viewContext: persistenceController.container.viewContext)
                     NexusServiceProvider.register()
-
-                    // D3: Auto-connect MCP servers on launch
-                    Task {
-                        NSLog("[MCP] Task started, calling connectAll")
-                        await MCPClientManager.shared.connectAll()
-                        NSLog("[MCP] connectAll finished")
-                    }
                 }
 
         }

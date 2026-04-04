@@ -203,6 +203,17 @@ struct QuickInputView: View {
         .onDrop(of: [UTType.fileURL, UTType.plainText], isTargeted: $isDragOver) { providers in
             handleFileDrop(providers)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .nexusServiceTextReceived)) { notification in
+            guard let text = notification.userInfo?["text"] as? String else { return }
+            let autoSend = notification.userInfo?["autoSend"] as? Bool ?? false
+
+            inputText = text
+            if autoSend {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    sendMessage()
+                }
+            }
+        }
     }
 
     // MARK: - Privacy Toggle

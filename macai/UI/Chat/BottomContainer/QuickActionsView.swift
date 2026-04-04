@@ -18,6 +18,7 @@ struct QuickActionItem: Identifiable {
 struct QuickActionsView: View {
     let onAction: (String) -> Void
     @State private var hoveredId: UUID?
+    @State private var showingTemplates = false
     
     private let actions: [QuickActionItem] = [
         QuickActionItem(icon: "bolt.fill", label: "Summarize", prompt: "Please summarize the above content concisely."),
@@ -30,6 +31,28 @@ struct QuickActionsView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
+                // Prompt Templates button
+                QuickActionChip(
+                    icon: "doc.on.clipboard",
+                    label: "Templates",
+                    isHovered: showingTemplates
+                )
+                .onTapGesture {
+                    showingTemplates.toggle()
+                }
+                .popover(isPresented: $showingTemplates, arrowEdge: .top) {
+                    PromptTemplatePickerView(
+                        onSelect: { template in
+                            onAction(template.content)
+                            showingTemplates = false
+                        },
+                        onDismiss: { showingTemplates = false }
+                    )
+                }
+
+                Divider()
+                    .frame(height: 18)
+
                 ForEach(actions) { action in
                     QuickActionChip(
                         icon: action.icon,
