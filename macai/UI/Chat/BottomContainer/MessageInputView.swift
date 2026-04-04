@@ -308,8 +308,8 @@ struct MessageInputView: View {
                                         .fill(
                                             text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                                                 && attachedImages.isEmpty && attachedFiles.isEmpty
-                                                ? Color(red: 108/255, green: 92/255, blue: 231/255).opacity(0.4)
-                                                : Color(red: 108/255, green: 92/255, blue: 231/255)
+                                                ? NexusThemeManager.shared.currentAccentColor.opacity(0.4)
+                                                : NexusThemeManager.shared.currentAccentColor
                                         )
                                 )
                         }
@@ -332,7 +332,7 @@ struct MessageInputView: View {
                                 isHoveringDropZone
                                     ? Color.green.opacity(0.8)
                                     : (isFocused == .focused
-                                        ? Color(red: 108/255, green: 92/255, blue: 231/255).opacity(0.6)
+                                        ? NexusThemeManager.shared.currentAccentColor.opacity(0.6)
                                         : Color.secondary.opacity(0.3)),
                                 lineWidth: isHoveringDropZone
                                     ? 4 : (isFocused == .focused ? 2 : 1)

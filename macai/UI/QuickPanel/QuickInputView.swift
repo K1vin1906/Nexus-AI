@@ -744,7 +744,7 @@ struct QuickPanelBubble: View {
                     .background(
                         RoundedRectangle(cornerRadius: 14)
                             .fill(message.role == "user"
-                                ? Color(red: 108/255, green: 92/255, blue: 231/255)
+                                ? NexusThemeManager.shared.currentAccentColor
                                 : (colorScheme == .dark
                                     ? Color.white.opacity(0.08)
                                     : Color.black.opacity(0.05)))

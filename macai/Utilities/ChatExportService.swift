@@ -111,7 +111,7 @@ class ChatExportService {
         .header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #d2d2d7; }
         .header .meta { font-size: 13px; color: #86868b; margin-top: 4px; }
         .message { margin-bottom: 16px; padding: 14px 18px; border-radius: 16px; }
-        .message.user { background: #6C5CE7; color: #fff; margin-left: 60px; border-bottom-right-radius: 4px; }
+        .message.user { background: \(NexusThemeManager.shared.currentAccentColor.hexString); color: #fff; margin-left: 60px; border-bottom-right-radius: 4px; }
         .message.ai { background: #fff; border: 1px solid #e5e5ea; margin-right: 60px; border-bottom-left-radius: 4px; }
         .message .meta { font-size: 11px; opacity: 0.7; margin-bottom: 6px; }
         .message.user .meta { color: rgba(255,255,255,0.7); }

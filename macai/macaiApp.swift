@@ -351,6 +351,7 @@ class PersistenceController {
 struct macaiApp: App {
     @AppStorage("gptModel") var gptModel: String = AppConstants.defaultPrimaryModel
     @AppStorage("preferredColorScheme") private var preferredColorSchemeRaw: Int = 0
+    @AppStorage("nexusAccentColor") private var accentColorRaw: String = NexusAccentColor.purple.rawValue
     @StateObject private var store = ChatStore(persistenceController: PersistenceController.shared)
 
     var preferredColorScheme: ColorScheme? {
@@ -359,6 +360,10 @@ struct macaiApp: App {
         case 2: return .dark
         default: return nil
         }
+    }
+
+    var nexusAccentColor: Color {
+        (NexusAccentColor(rawValue: accentColorRaw) ?? .purple).color
     }
     @Environment(\.scenePhase) private var scenePhase
 
@@ -393,6 +398,8 @@ struct macaiApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .preferredColorScheme(preferredColorScheme)
+                .tint(nexusAccentColor)
+                .accentColor(nexusAccentColor)
                 .onAppear {
                     QuickPanelController.shared.setup(viewContext: persistenceController.container.viewContext)
                 }
@@ -475,6 +482,8 @@ struct macaiApp: App {
             PreferencesView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .preferredColorScheme(preferredColorScheme)
+                .tint(nexusAccentColor)
+                .accentColor(nexusAccentColor)
         }
     }
 }

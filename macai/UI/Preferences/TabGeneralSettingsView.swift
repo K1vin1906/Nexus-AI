@@ -192,6 +192,40 @@ struct TabGeneralSettingsView: View {
                             .gridColumnAlignment(.trailing)
                             .frame(maxWidth: .infinity)
                         }
+                        
+                        Divider()
+                        
+                        // Accent Color picker (A1 Theme System)
+                        GridRow {
+                            HStack {
+                                Text("Accent Color")
+                                Spacer()
+                            }
+                            .frame(width: 120)
+                            .gridCellAnchor(.top)
+
+                            HStack(spacing: 8) {
+                                ForEach(NexusAccentColor.allCases) { accent in
+                                    Button(action: {
+                                        NexusThemeManager.shared.accentColor = accent
+                                    }) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(accent.color)
+                                                .frame(width: 24, height: 24)
+                                            if NexusThemeManager.shared.accentColorRaw == accent.rawValue {
+                                                Circle()
+                                                    .stroke(Color.primary, lineWidth: 2)
+                                                    .frame(width: 30, height: 30)
+                                            }
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                    .help(accent.displayName)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
                     }
                     .padding(8)
                 }

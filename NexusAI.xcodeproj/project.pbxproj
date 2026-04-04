@@ -34,6 +34,7 @@
 		4A254A6D2CEA69EB00F66935 /* HighlighterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A254A6C2CEA69EB00F66935 /* HighlighterManager.swift */; };
 		4A254A6F2CEA6A2400F66935 /* CodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A254A6E2CEA6A2400F66935 /* CodeViewModel.swift */; };
 		4A270AE329D4AFE7005E063C /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A270AE229D4AFE7005E063C /* AppConstants.swift */; };
+		F85D656ABA46473DBCE796A8 /* NexusTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8FC2083F94D19BBDF9B2A /* NexusTheme.swift */; };
 		4A272A7429F5DAA800F93D0D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A272A7329F5DAA800F93D0D /* Models.swift */; };
 		4A27FF8F2DA1C41B0075D730 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A27FF8E2DA1C41B0075D730 /* ZoomableImageView.swift */; };
 		4A27FF912DA1C43E0075D730 /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A27FF902DA1C43E0075D730 /* MessageInputView.swift */; };
@@ -186,6 +187,7 @@
 		4A254A6C2CEA69EB00F66935 /* HighlighterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlighterManager.swift; sourceTree = "<group>"; };
 		4A254A6E2CEA6A2400F66935 /* CodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeViewModel.swift; sourceTree = "<group>"; };
 		4A270AE229D4AFE7005E063C /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		E6A8FC2083F94D19BBDF9B2A /* NexusTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NexusTheme.swift; sourceTree = "<group>"; };
 		4A272A7329F5DAA800F93D0D /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		4A27FF8E2DA1C41B0075D730 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		4A27FF902DA1C43E0075D730 /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 			isa = PBXGroup;
 			children = (
 				4A270AE229D4AFE7005E063C /* AppConstants.swift */,
+				E6A8FC2083F94D19BBDF9B2A /* NexusTheme.swift */,
 				7E9696501A3843E4A2D9926B /* APIServiceTemplates.json */,
 			);
 			path = Configuration;
@@ -825,6 +828,7 @@
 				4A27FF912DA1C43E0075D730 /* MessageInputView.swift in Sources */,
 				4A49187A2D9F4186007EB4A2 /* ToolbarButton.swift in Sources */,
 				4A270AE329D4AFE7005E063C /* AppConstants.swift in Sources */,
+				F85D656ABA46473DBCE796A8 /* NexusTheme.swift in Sources */,
 				4A399C9929BC8FEF00E98796 /* macaiApp.swift in Sources */,
 				4A54E85B2ED6500F0068C25E /* CloudSyncManager.swift in Sources */,
 				4A775A042C1486F3004301D3 /* Extensions.swift in Sources */,
