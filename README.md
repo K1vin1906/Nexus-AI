@@ -4,50 +4,70 @@
   <img src="screenshot-hero.png" alt="Nexus AI" width="100%">
 </p>
 
-A native macOS AI chat client with multi-model support, system-level integration, and privacy-first design.
+A native macOS AI chat client with multi-model support, web search, MCP tools, and system-level integration.
 
-[![Download](https://img.shields.io/badge/Download-v1.0.0-6C5CE7?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/K1vin1906/Nexus-AI/releases/tag/v1.0.0)
+[![Download](https://img.shields.io/badge/Download-v2.0-6C5CE7?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/K1vin1906/Nexus-AI/releases/tag/v2.0)
 [![License](https://img.shields.io/badge/License-Apache_2.0-4ECDC4?style=for-the-badge)](LICENSE.md)
 [![macOS](https://img.shields.io/badge/macOS-14.0+-000?style=for-the-badge&logo=apple)](https://github.com/K1vin1906/Nexus-AI)
 
+## What's New in v2.0
+
+- **🌐 Gemini Web Search** — Real-time Google Search grounding with source citations
+- **🔌 MCP Integration** — Connect AI to local tools via Model Context Protocol
+- **🎨 Modern UI** — Redesigned message bubbles with provider avatars and brand colors
+- **⚙️ Settings Overhaul** — Grouped card layout with provider icons and one-click test
+
 ## Features
 
-### Multi-Model Support
+### 9 AI Providers
 Connect to multiple AI providers from a single interface:
-- **Google Gemini** — chat, vision, image generation
-- **DeepSeek** — fast, affordable text chat
+- **Google Gemini** — chat, vision, image generation, **web search**
+- **DeepSeek** — fast reasoning with thinking process display
 - **Claude** (Anthropic) — advanced reasoning
 - **OpenAI** — GPT models with vision and DALL-E
 - **Ollama** — local models, fully offline
-- **OpenRouter, Perplexity, xAI** — and more
+- **Perplexity** — built-in web search with citations
+- **OpenRouter, xAI** — and more
+
+### Smart Features
+- **Smart Router** — auto-routes queries to the best model (code → DeepSeek, images → Gemini)
+- **Prompt Templates** — 12 built-in templates + custom templates with category filtering
+- **Multi-Window** — open chats in independent windows for side-by-side comparison
+- **MCP Tools** — AI can discover and call local tools via Model Context Protocol
+- **Web Search** — Gemini Google Search grounding with real-time sources
 
 ### macOS Native Experience
-- **MenuBar app** — always one click away
-- **Global hotkey (⌥Space)** — Spotlight-like Quick Panel for instant AI access
-- **File drag & drop** — drop code, text, PDFs directly into Quick Panel
-- **Clipboard monitoring** — detect new clipboard content, one-click analyze
+- **MenuBar App** — always one click away
+- **Global Hotkey (⌥Space)** — Spotlight-like Quick Panel for instant AI access
+- **File Drag & Drop** — drop code, text, PDFs directly into chat
+- **Clipboard Monitoring** — detect new content, one-click analyze
 - **Apple Shortcuts** — Ask AI, Summarize, Translate in automation workflows
-- **Privacy Mode** — force all traffic through local Ollama, data never leaves your Mac
+- **System Services** — right-click "Ask/Summarize/Translate with Nexus AI"
+- **Privacy Mode** — force all traffic through local Ollama
 
 ### Chat Features
-- Streaming responses with Markdown rendering
-- Code syntax highlighting (Fira Code)
+- Streaming responses with Markdown rendering and code highlighting
 - AI Personas with custom system prompts
-- PDF and image attachments
-- Chat search and history
-- iCloud sync (optional)
-- Voice input (Speech-to-Text) and Text-to-Speech
+- PDF and image attachments (Gemini, OpenAI, OpenRouter)
+- Image generation (Gemini, OpenAI)
+- Chat export to Markdown, PDF, and HTML
+- Chat search and history with iCloud sync
+- Voice input (STT) and Text-to-Speech
+- NexusTheme with 7 accent colors and dark/light modes
 
-## Requirements
-- macOS 14.0 (Sonoma) or later
-- Apple Silicon (arm64)
+## Installation
 
-## Quick Start
-1. Clone this repo
-2. Open `NexusAI.xcodeproj` in Xcode
-3. Build and run
-4. Add your API keys in Settings → API Services
-5. Press `⌥Space` anywhere to start chatting
+**Download:** Grab the [latest DMG](https://github.com/K1vin1906/Nexus-AI/releases/tag/v2.0), open it, drag Nexus AI to Applications.
+
+**Requirements:** macOS 14.0+ (Apple Silicon)
+
+**Build from source:**
+```bash
+git clone https://github.com/K1vin1906/Nexus-AI.git
+cd Nexus-AI
+open NexusAI.xcodeproj
+# Build and run (⌘R)
+```
 
 ## API Setup
 
@@ -63,11 +83,6 @@ Connect to multiple AI providers from a single interface:
 
 Nexus AI is a derivative work based on [macai](https://github.com/Renset/macai) by **Renat Notfullin**, licensed under the Apache License 2.0.
 
-Third-party dependencies: Highlightr, Sparkle, SwiftMath, KeychainAccess, FiraCode.
-
 ## License
 
-Copyright 2025 K1vin
-Copyright 2024 Renat Notfullin
-
-Licensed under the Apache License, Version 2.0. See [LICENSE.md](LICENSE.md) for details.
+Copyright 2025 K1vin · Licensed under [Apache 2.0](LICENSE.md)
