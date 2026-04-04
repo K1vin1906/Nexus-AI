@@ -26,7 +26,6 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case apiServices = "API Services"
     case aiAssistants = "AI Assistants"
     case backupRestore = "Backup & Restore"
-    case mcpServers = "MCP Servers"
     case dangerZone = "Danger Zone"
 
     var id: String { rawValue }
@@ -37,7 +36,6 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .apiServices: return "network"
         case .aiAssistants: return "person.2.fill"
         case .backupRestore: return "externaldrive.fill"
-        case .mcpServers: return "puzzlepiece.extension.fill"
         case .dangerZone: return "exclamationmark.triangle.fill"
         }
     }
@@ -48,7 +46,6 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .apiServices: return .nexusCyan
         case .aiAssistants: return .blue
         case .backupRestore: return .green
-        case .mcpServers: return .orange
         case .dangerZone: return .red
         }
     }
@@ -120,8 +117,6 @@ struct PreferencesView: View {
                         TabAIPersonasView()
                     case .backupRestore:
                         BackupRestoreView(store: store)
-                    case .mcpServers:
-                        TabMCPServersView()
                     case .dangerZone:
                         DangerZoneView(store: store)
                     }
@@ -164,7 +159,6 @@ struct PreferencesView: View {
         case .apiServices: return "Configure AI model providers"
         case .aiAssistants: return "Manage AI persona presets"
         case .backupRestore: return "Backup, restore, and export data"
-        case .mcpServers: return "Connect AI to local tools via MCP"
         case .dangerZone: return "Irreversible destructive actions"
         }
     }
