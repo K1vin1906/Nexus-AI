@@ -207,28 +207,37 @@ class WebSearchService {
     
     // MARK: - Gemini API Key Retrieval
     
-    /// Finds the Gemini API key from CoreData + Keychain
+    /// Finds the Gemini API key by scanning all stored tokens for the Google API key prefix
     private func getGeminiAPIKey() -> String? {
         let context = PersistenceController.shared.container.viewContext
         var apiKey: String?
         
         context.performAndWait {
+            // Scan ALL service entities and try each one's token
             let fetchRequest: NSFetchRequest<APIServiceEntity> = APIServiceEntity.fetchRequest()
-            fetchRequest.predicate = NSPredicate(
-                format: "type == %@ OR type == %@", "gemini", "Gemini"
-            )
-            fetchRequest.fetchLimit = 1
             
             do {
-                let results = try context.fetch(fetchRequest)
-                if let geminiService = results.first,
-                   let serviceId = geminiService.id {
-                    apiKey = try? TokenManager.getToken(
-                        for: serviceId.uuidString
-                    )
+                let services = try context.fetch(fetchRequest)
+                for service in services {
+                    guard let serviceId = service.id else { continue }
+                    if let key = try? TokenManager.getToken(for: serviceId.uuidString),
+                       !key.isEmpty,
+                       key.hasPrefix("AIza") { // Google/Gemini API keys start with AIza
+                        apiKey = key
+                        return
+                    }
+                    // Also try tokenIdentifier
+                    if let tokenId = service.tokenIdentifier, !tokenId.isEmpty {
+                        if let key = try? TokenManager.getToken(for: tokenId),
+                           !key.isEmpty,
+                           key.hasPrefix("AIza") {
+                            apiKey = key
+                            return
+                        }
+                    }
                 }
             } catch {
-                print("WebSearchService: Failed to fetch Gemini service: \(error)")
+                print("WebSearchService: Failed to scan services: \(error)")
             }
         }
         
