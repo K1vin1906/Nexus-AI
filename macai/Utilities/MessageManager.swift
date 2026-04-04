@@ -15,9 +15,6 @@ class MessageManager: ObservableObject {
     private let updateInterval = AppConstants.streamedResponseUpdateUIInterval
     private var streamTask: Task<Void, Never>?
     private var cancelRequested = false
-    
-    /// Web search context injected before each request (for non-native-search providers)
-    private var pendingSearchContext: String?
 
     init(apiService: APIService, viewContext: NSManagedObjectContext) {
         self.apiService = apiService
@@ -30,31 +27,6 @@ class MessageManager: ObservableObject {
     }
 
     func sendMessage(
-        _ message: String,
-        in chat: ChatEntity,
-        contextSize: Int,
-        completion: @escaping (Result<Void, Error>) -> Void
-    ) {
-        let providerName = apiService.name
-        
-        // Only trigger web search for queries that need real-time info
-        let needsSearch = !WebSearchService.supportsNativeSearch(providerName)
-            && SmartRouter.shared.classify(message) == .search
-        
-        if needsSearch {
-            // Async search first, then send
-            Task { @MainActor in
-                let searchResult = await WebSearchService.shared.search(query: message)
-                self.pendingSearchContext = searchResult?.formattedContext()
-                self.performSendMessage(message, in: chat, contextSize: contextSize, completion: completion)
-            }
-        } else {
-            pendingSearchContext = nil
-            performSendMessage(message, in: chat, contextSize: contextSize, completion: completion)
-        }
-    }
-    
-    private func performSendMessage(
         _ message: String,
         in chat: ChatEntity,
         contextSize: Int,
@@ -136,17 +108,6 @@ class MessageManager: ObservableObject {
         streamTask = Task { [weak self] in
             guard let self = self else { return }
             defer { self.streamTask = nil }
-            
-            // Web search only for queries that need real-time info
-            let providerName = self.apiService.name
-            let needsSearch = !WebSearchService.supportsNativeSearch(providerName)
-                && SmartRouter.shared.classify(message) == .search
-            if needsSearch {
-                let searchResult = await WebSearchService.shared.search(query: message)
-                self.pendingSearchContext = searchResult?.formattedContext()
-            } else {
-                self.pendingSearchContext = nil
-            }
             
             let requestMessages = self.prepareRequestMessages(userMessage: message, chat: chat, contextSize: contextSize)
             
@@ -416,12 +377,7 @@ class MessageManager: ObservableObject {
 
         if !AppConstants.openAiReasoningModels.contains(chat.gptModel) {
             var systemContent = chat.systemMessage
-            // Inject web search results for non-native-search providers
-            if let searchContext = pendingSearchContext {
-                systemContent += searchContext
-                pendingSearchContext = nil
-            }
-            // D3: Inject MCP tool descriptions only for Gemini (other providers misinterpret tool calls)
+            // D3: Inject MCP tool descriptions only for Gemini
             if apiService is GeminiHandler,
                let mcpToolsPrompt = MCPToolRouter.shared.cachedToolsPrompt() {
                 systemContent += mcpToolsPrompt
@@ -434,10 +390,6 @@ class MessageManager: ObservableObject {
         else {
             // Models like o1-mini and o1-preview don't support "system" role.
             var systemContent = "Take this message as the system message: \(chat.systemMessage)"
-            if let searchContext = pendingSearchContext {
-                systemContent += searchContext
-                pendingSearchContext = nil
-            }
             messages.append([
                 "role": "user",
                 "content": systemContent,
