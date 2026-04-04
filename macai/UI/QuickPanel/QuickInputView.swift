@@ -11,19 +11,27 @@ import PDFKit
 import UniformTypeIdentifiers
 
 /// The SwiftUI view rendered inside QuickPanelWindow.
-/// Provides a compact input field with model selector and streaming response.
+/// Provides a compact input field with model selector and multi-turn streaming conversation.
+struct QuickPanelMessage: Identifiable {
+    let id = UUID()
+    let role: String      // "user" or "assistant"
+    let content: String
+    let timestamp: Date
+}
+
 struct QuickInputView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var inputText: String = ""
-    @State private var responseText: String = ""
+    @State private var currentStreamText: String = ""
     @State private var isLoading: Bool = false
-    @State private var showResponse: Bool = false
+    @State private var conversationMessages: [QuickPanelMessage] = []
     @State private var selectedProviderName: String = "gemini"
     @ObservedObject private var clipboardMonitor = ClipboardMonitor.shared
     @ObservedObject private var privacyMode = PrivacyModeManager.shared
     @State private var droppedFileContent: String = ""
     @State private var droppedFileName: String = ""
     @State private var isDragOver: Bool = false
+    @State private var savedChatEntity: ChatEntity? = nil
 
     var onOpenInMainWindow: ((String) -> Void)?
     var onDismiss: (() -> Void)?
@@ -47,27 +55,18 @@ struct QuickInputView: View {
                 clipboardButton
 
                 // Text input
-                TextField("Ask anything... (⌥Space)", text: $inputText)
+                TextField(conversationMessages.isEmpty ? "Ask anything... (⌥Space)" : "Follow up...", text: $inputText)
                     .textFieldStyle(.plain)
                     .font(.system(size: 16))
                     .onSubmit {
                         sendMessage()
                     }
 
-                // Send / Loading / Reset indicator
+                // Send / Loading indicator
                 if isLoading {
                     ProgressView()
                         .scaleEffect(0.7)
                         .frame(width: 24, height: 24)
-                } else if showResponse {
-                    // After response: show reset button to ask new question
-                    Button(action: resetConversation) {
-                        Image(systemName: "arrow.counterclockwise.circle.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help("New Question")
                 } else {
                     Button(action: sendMessage) {
                         Image(systemName: "arrow.up.circle.fill")
@@ -107,35 +106,75 @@ struct QuickInputView: View {
                 .background(Color.accentColor.opacity(0.08))
             }
 
-            // Response area (shown after sending)
-            if showResponse {
+            // Conversation thread (shown when there are messages)
+            if !conversationMessages.isEmpty || isLoading {
                 Divider()
 
-                ScrollView {
-                    Text(responseText.isEmpty ? "Thinking..." : responseText)
-                        .font(.system(size: 14))
-                        .foregroundColor(responseText.isEmpty ? .secondary : .primary)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(16)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 12) {
+                            ForEach(conversationMessages) { msg in
+                                QuickPanelBubble(message: msg)
+                                    .id(msg.id)
+                            }
+                            // Show streaming response
+                            if isLoading && !currentStreamText.isEmpty {
+                                QuickPanelBubble(message: QuickPanelMessage(
+                                    role: "assistant",
+                                    content: currentStreamText,
+                                    timestamp: Date()
+                                ))
+                                .id("streaming")
+                            } else if isLoading && currentStreamText.isEmpty {
+                                HStack(spacing: 6) {
+                                    ProgressView()
+                                        .scaleEffect(0.6)
+                                    Text("Thinking...")
+                                        .font(.system(size: 13))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 12)
+                                .id("thinking")
+                            }
+                        }
+                        .padding(12)
+                    }
+                    .frame(maxHeight: maxResponseHeight)
+                    .onChange(of: conversationMessages.count) { _ in
+                        withAnimation {
+                            proxy.scrollTo(conversationMessages.last?.id, anchor: .bottom)
+                        }
+                    }
+                    .onChange(of: currentStreamText) { _ in
+                        withAnimation {
+                            proxy.scrollTo("streaming", anchor: .bottom)
+                        }
+                    }
                 }
-                .frame(maxHeight: maxResponseHeight)
 
                 Divider()
 
                 // Bottom bar: actions
                 HStack {
-                    Button(action: copyResponse) {
+                    Button(action: copyLastResponse) {
                         Label("Copy", systemImage: "doc.on.doc")
                             .font(.system(size: 12))
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary)
+                    .disabled(conversationMessages.isEmpty)
+
+                    Spacer()
+
+                    // Turn count
+                    Text("\(conversationMessages.filter { $0.role == "user" }.count) turns")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary.opacity(0.6))
 
                     Spacer()
                     
                     Button(action: resetConversation) {
-                        Label("New Question", systemImage: "plus.circle")
+                        Label("New Chat", systemImage: "plus.circle")
                             .font(.system(size: 12))
                     }
                     .buttonStyle(.plain)
@@ -144,7 +183,7 @@ struct QuickInputView: View {
                     Spacer()
 
                     Button(action: { onOpenInMainWindow?(inputText) }) {
-                        Label("Open in Main Window", systemImage: "arrow.up.forward.square")
+                        Label("Open in Main", systemImage: "arrow.up.forward.square")
                             .font(.system(size: 12))
                     }
                     .buttonStyle(.plain)
@@ -249,9 +288,21 @@ struct QuickInputView: View {
 
     private func sendMessage() {
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        
+        let userContent = buildUserMessage()
+        
+        // Add user message to conversation
+        let userMsg = QuickPanelMessage(role: "user", content: userContent, timestamp: Date())
+        conversationMessages.append(userMsg)
+        
+        // Clear input for next message
+        let sentText = inputText
+        inputText = ""
+        droppedFileName = ""
+        droppedFileContent = ""
+        
         isLoading = true
-        showResponse = true
-        responseText = ""
+        currentStreamText = ""
         
         // Give SwiftUI a moment to layout, then resize
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -261,10 +312,14 @@ struct QuickInputView: View {
         // Find the first APIService matching selected provider
         let effectiveProvider = privacyMode.isEnabled ? "ollama" : selectedProviderName
         let config = resolveAPIConfig(for: effectiveProvider)
-        print("QuickPanel: Sending to \(config.name), URL: \(config.apiUrl), model: \(config.model), apiKey length: \(config.apiKey.count), privacy: \(privacyMode.isEnabled)")
         
         guard !config.apiKey.isEmpty || effectiveProvider == "ollama" else {
-            responseText = "⚠️ No API key found for \(displayName(for: effectiveProvider)). Please configure it in Settings → API Services."
+            let errorMsg = QuickPanelMessage(
+                role: "assistant",
+                content: "⚠️ No API key found for \(displayName(for: effectiveProvider)). Please configure it in Settings → API Services.",
+                timestamp: Date()
+            )
+            conversationMessages.append(errorMsg)
             isLoading = false
             resizePanel()
             return
@@ -272,50 +327,68 @@ struct QuickInputView: View {
         
         let service = APIServiceFactory.createAPIService(config: config)
 
-        let messages: [[String: String]] = [
-            ["role": "system", "content": "You are a helpful assistant. Be concise."],
-            ["role": "user", "content": buildUserMessage()]
+        // Build full conversation context
+        var messages: [[String: String]] = [
+            ["role": "system", "content": "You are a helpful assistant. Be concise."]
         ]
+        for msg in conversationMessages {
+            messages.append(["role": msg.role, "content": msg.content])
+        }
 
         Task {
             do {
                 let stream = try await service.sendMessageStream(messages, temperature: 0.7)
                 for try await chunk in stream {
                     await MainActor.run {
-                        responseText += chunk
+                        currentStreamText += chunk
                         resizePanel()
                     }
                 }
                 await MainActor.run {
+                    // Add completed response to conversation
+                    let assistantMsg = QuickPanelMessage(
+                        role: "assistant",
+                        content: currentStreamText,
+                        timestamp: Date()
+                    )
+                    conversationMessages.append(assistantMsg)
+                    currentStreamText = ""
                     isLoading = false
                     resizePanel()
-                    // Save conversation to main chat list
+                    // Save/update conversation in main chat list
                     saveToMainChatList()
                 }
             } catch {
                 await MainActor.run {
-                    responseText = "Error: \(error.localizedDescription)"
+                    let errorMsg = QuickPanelMessage(
+                        role: "assistant",
+                        content: "Error: \(error.localizedDescription)",
+                        timestamp: Date()
+                    )
+                    conversationMessages.append(errorMsg)
+                    currentStreamText = ""
                     isLoading = false
                     resizePanel()
-                    print("QuickPanel error: \(error)")
                 }
             }
         }
     }
 
-    private func copyResponse() {
+    private func copyLastResponse() {
+        guard let lastAssistant = conversationMessages.last(where: { $0.role == "assistant" }) else { return }
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(responseText, forType: .string)
+        NSPasteboard.general.setString(lastAssistant.content, forType: .string)
     }
 
-    /// Reset to ask a new question
+    /// Reset to start a new conversation
     private func resetConversation() {
         inputText = ""
-        responseText = ""
-        showResponse = false
+        currentStreamText = ""
+        conversationMessages = []
         isLoading = false
         droppedFileName = ""
         droppedFileContent = ""
+        savedChatEntity = nil
         // Shrink panel back to compact size
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             resizePanel()
@@ -332,11 +405,11 @@ struct QuickInputView: View {
 
     // MARK: - Sync to Main Chat List
 
-    /// Save the Quick Panel Q&A as a new chat in CoreData so it appears in the main window
+    /// Save or update the Quick Panel conversation in CoreData
     private func saveToMainChatList() {
-        guard !responseText.isEmpty else { return }
-
-        let userMessage = buildUserMessage()
+        guard !conversationMessages.isEmpty else { return }
+        
+        let firstUserMsg = conversationMessages.first(where: { $0.role == "user" })?.content ?? ""
         
         // Find the API service for this provider
         let fetchRequest = NSFetchRequest<APIServiceEntity>(entityName: "APIServiceEntity")
@@ -344,60 +417,69 @@ struct QuickInputView: View {
         fetchRequest.fetchLimit = 1
         let apiService = try? viewContext.fetch(fetchRequest).first
 
-        // Create a new ChatEntity
-        let chat = ChatEntity(context: viewContext)
-        chat.id = UUID()
-        chat.newChat = false
-        chat.temperature = 0.7
-        chat.top_p = 1.0
-        chat.behavior = "default"
-        chat.draftMessage = ""
-        chat.createdDate = Date()
+        let chat: ChatEntity
+        if let existing = savedChatEntity {
+            // Update existing chat
+            chat = existing
+            // Remove old messages
+            if let oldMessages = chat.messages as? Set<MessageEntity> {
+                for msg in oldMessages {
+                    viewContext.delete(msg)
+                }
+            }
+        } else {
+            // Create new chat
+            chat = ChatEntity(context: viewContext)
+            chat.id = UUID()
+            chat.newChat = false
+            chat.temperature = 0.7
+            chat.top_p = 1.0
+            chat.behavior = "default"
+            chat.draftMessage = ""
+            chat.createdDate = Date()
+            chat.systemMessage = "You are a helpful assistant. Be concise."
+            chat.gptModel = apiService?.model ?? AppConstants.defaultModel(for: selectedProviderName)
+            chat.apiService = apiService
+            chat.persona = apiService?.defaultPersona
+
+            // Generate chat name from first user message
+            let namePreview = String(firstUserMsg.prefix(30))
+            chat.name = "⚡ \(namePreview)\(firstUserMsg.count > 30 ? "..." : "")"
+            
+            savedChatEntity = chat
+        }
+        
         chat.updatedDate = Date()
-        chat.systemMessage = "You are a helpful assistant. Be concise."
-        chat.gptModel = apiService?.model ?? AppConstants.defaultModel(for: selectedProviderName)
-        chat.lastSequence = 2
-        chat.apiService = apiService
-        chat.persona = apiService?.defaultPersona
+        chat.lastSequence = Int64(conversationMessages.count)
 
-        // Generate chat name from first ~30 chars of input
-        let namePreview = String(inputText.prefix(30))
-        chat.name = "⚡ \(namePreview)\(inputText.count > 30 ? "..." : "")"
-
-        // Create user message
-        let userMsg = MessageEntity(context: viewContext)
-        userMsg.id = 1
-        userMsg.sequence = 1
-        userMsg.body = userMessage
-        userMsg.own = true
-        userMsg.timestamp = Date()
-        userMsg.waitingForResponse = false
-        userMsg.chat = chat
-        chat.addToMessages(userMsg)
-
-        // Create assistant message
-        let assistantMsg = MessageEntity(context: viewContext)
-        assistantMsg.id = 2
-        assistantMsg.sequence = 2
-        assistantMsg.body = responseText
-        assistantMsg.own = false
-        assistantMsg.name = displayName(for: selectedProviderName)
-        assistantMsg.timestamp = Date()
-        assistantMsg.waitingForResponse = false
-        assistantMsg.chat = chat
-        chat.addToMessages(assistantMsg)
+        // Re-create all messages
+        for (index, msg) in conversationMessages.enumerated() {
+            let messageEntity = MessageEntity(context: viewContext)
+            messageEntity.id = Int64(index + 1)
+            messageEntity.sequence = Int64(index + 1)
+            messageEntity.body = msg.content
+            messageEntity.own = (msg.role == "user")
+            messageEntity.timestamp = msg.timestamp
+            messageEntity.waitingForResponse = false
+            if msg.role == "assistant" {
+                messageEntity.name = displayName(for: selectedProviderName)
+            }
+            messageEntity.chat = chat
+            chat.addToMessages(messageEntity)
+        }
 
         // Build requestMessages for conversation continuity
-        chat.requestMessages = [
-            ["role": "system", "content": "You are a helpful assistant. Be concise."],
-            ["role": "user", "content": userMessage],
-            ["role": "assistant", "content": responseText]
+        var requestMessages: [[String: String]] = [
+            ["role": "system", "content": "You are a helpful assistant. Be concise."]
         ]
+        for msg in conversationMessages {
+            requestMessages.append(["role": msg.role, "content": msg.content])
+        }
+        chat.requestMessages = requestMessages
 
         // Save
         do {
             try viewContext.save()
-            print("QuickPanel: Saved conversation to main chat list: \(chat.name ?? "")")
         } catch {
             print("QuickPanel: Failed to save conversation: \(error)")
         }
@@ -639,6 +721,38 @@ struct QuickInputView: View {
             apiKey: "",
             model: "gemini-2.5-flash"
         )
+    }
+}
+
+// MARK: - Chat Bubble for Quick Panel
+
+struct QuickPanelBubble: View {
+    let message: QuickPanelMessage
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        HStack {
+            if message.role == "user" { Spacer(minLength: 40) }
+            
+            VStack(alignment: message.role == "user" ? .trailing : .leading, spacing: 4) {
+                Text(message.content)
+                    .font(.system(size: 13))
+                    .textSelection(.enabled)
+                    .foregroundColor(message.role == "user" ? .white : .primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(message.role == "user"
+                                ? Color(red: 108/255, green: 92/255, blue: 231/255)
+                                : (colorScheme == .dark
+                                    ? Color.white.opacity(0.08)
+                                    : Color.black.opacity(0.05)))
+                    )
+            }
+            
+            if message.role == "assistant" { Spacer(minLength: 40) }
+        }
     }
 }
 
