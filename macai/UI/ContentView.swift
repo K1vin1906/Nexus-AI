@@ -515,7 +515,7 @@ struct PreviewPane: View {
 
             HTMLPreviewView(htmlContent: stateManager.previewContent)
         }
-        .background(Color(NSColor.windowBackgroundColor))
+        .background(.thinMaterial)
         .gesture(
             DragGesture()
                 .onChanged { gesture in
@@ -540,6 +540,10 @@ struct WindowAccessor: NSViewRepresentable {
         let view = NSView()
         DispatchQueue.main.async {
             self.window = view.window
+            // Enable vibrancy / frosted glass effect
+            view.window?.titlebarAppearsTransparent = true
+            view.window?.isOpaque = false
+            view.window?.backgroundColor = .clear
         }
         return view
     }

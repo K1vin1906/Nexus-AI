@@ -38,7 +38,7 @@ struct ChatView: View {
     
     // Environment
     @Environment(\.colorScheme) private var colorScheme
-    var backgroundColor = Color(NSColor.controlBackgroundColor)
+    var backgroundColor = Color(NSColor.controlBackgroundColor).opacity(0.3)
     private let reasoningTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
     // MARK: - Initialization
@@ -102,6 +102,7 @@ struct ChatView: View {
             chatInputView
         }
         .environmentObject(speechManager)
+        .background(.thinMaterial)
         .background(backgroundColor)
         .navigationTitle(chat.name != "" ? chat.name : chat.persona?.name ?? "macai LLM chat")
         .onAppear(perform: {

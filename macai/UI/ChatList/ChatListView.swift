@@ -124,6 +124,7 @@ struct ChatListView: View {
                 .padding(10)
             }
         }
+        .background(.thinMaterial)
         .background(NexusTheme.Sidebar.background(colorScheme))
         .onChange(of: searchText) { newValue in
             debounceTimer?.invalidate()

@@ -38,7 +38,7 @@ struct MessageInputView: View {
     @State private var photoPickerItems: [PhotosPickerItem] = []
 
     private let maxInputHeight = 160.0
-    private let initialInputSize = 16.0
+    private let initialInputSize = 28.0
     private let inputPadding = 8.0
     private let lineWidthOnBlur = 2.0
     private let lineWidthOnFocus = 3.0
@@ -325,7 +325,7 @@ struct MessageInputView: View {
             .frame(maxWidth: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(Color(NSColor.controlBackgroundColor))
+                    .fill(.thinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .stroke(

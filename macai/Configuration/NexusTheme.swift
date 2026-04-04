@@ -70,8 +70,8 @@ struct NexusTheme {
     struct Sidebar {
         static func background(_ scheme: ColorScheme) -> Color {
             scheme == .dark
-                ? Color(red: 26/255, green: 26/255, blue: 46/255)   // #1A1A2E
-                : Color(red: 245/255, green: 243/255, blue: 255/255) // #F5F3FF
+                ? Color(red: 26/255, green: 26/255, blue: 46/255).opacity(0.7)
+                : Color(red: 237/255, green: 235/255, blue: 245/255).opacity(0.97)
         }
         static func rowHover(_ scheme: ColorScheme) -> Color {
             Color.nexusPurple.opacity(scheme == .dark ? 0.15 : 0.08)
@@ -90,8 +90,8 @@ struct NexusTheme {
     struct Chat {
         static func background(_ scheme: ColorScheme) -> Color {
             scheme == .dark
-                ? Color(red: 22/255, green: 22/255, blue: 42/255)   // #16162A
-                : .white
+                ? Color(red: 22/255, green: 22/255, blue: 42/255).opacity(0.75)
+                : Color.white.opacity(0.95)
         }
         static func userBubble(_ scheme: ColorScheme) -> Color {
             Color.nexusPurple.opacity(scheme == .dark ? 0.25 : 0.12)
@@ -137,8 +137,8 @@ struct NexusTheme {
         }
         static func toolbarBackground(_ scheme: ColorScheme) -> Color {
             scheme == .dark
-                ? Color(red: 26/255, green: 26/255, blue: 46/255).opacity(0.85)
-                : Color(red: 245/255, green: 243/255, blue: 255/255).opacity(0.85)
+                ? Color(red: 26/255, green: 26/255, blue: 46/255).opacity(0.75)
+                : Color(red: 237/255, green: 235/255, blue: 245/255).opacity(0.97)
         }
     }
 
