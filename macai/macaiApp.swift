@@ -406,7 +406,9 @@ struct macaiApp: App {
 
                     // D3: Auto-connect MCP servers on launch
                     Task {
+                        NSLog("[MCP] Task started, calling connectAll")
                         await MCPClientManager.shared.connectAll()
+                        NSLog("[MCP] connectAll finished")
                     }
                 }
 

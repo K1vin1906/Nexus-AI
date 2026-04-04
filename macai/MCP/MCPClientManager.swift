@@ -11,6 +11,9 @@
 import Foundation
 import MCP
 import System
+import os.log
+
+private let mcpLog = OSLog(subsystem: "com.k1vin.nexusai", category: "MCP")
 
 // MARK: - MCP Tool Info (simplified for UI)
 
@@ -58,12 +61,22 @@ actor MCPServerConnection {
         state = .connecting
 
         // Launch subprocess for MCP server
+        // Use /usr/bin/env as the launcher to avoid macOS Process issues
+        // with symlinks and script executables (npx, uvx, etc.)
         let proc = Process()
-        proc.executableURL = URL(fileURLWithPath: config.command)
-        proc.arguments = config.args
+        proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+        proc.arguments = [config.command] + config.args
 
-        // Set environment
+        // Set environment — ensure PATH includes homebrew
         var environment = ProcessInfo.processInfo.environment
+        let homebrewPath = "/opt/homebrew/bin:/opt/homebrew/sbin"
+        if let existingPath = environment["PATH"] {
+            if !existingPath.contains("/opt/homebrew/bin") {
+                environment["PATH"] = homebrewPath + ":" + existingPath
+            }
+        } else {
+            environment["PATH"] = homebrewPath + ":/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        }
         if let env = config.env {
             environment.merge(env) { _, new in new }
         }
@@ -72,12 +85,23 @@ actor MCPServerConnection {
         // Create pipes for stdio communication
         let stdinPipe = Pipe()
         let stdoutPipe = Pipe()
+        let stderrPipe = Pipe()
         proc.standardInput = stdinPipe
         proc.standardOutput = stdoutPipe
-        proc.standardError = FileHandle.nullDevice
+        proc.standardError = stderrPipe
+
+        // Log stderr in background for debugging
+        stderrPipe.fileHandleForReading.readabilityHandler = { handle in
+            let data = handle.availableData
+            if !data.isEmpty, let str = String(data: data, encoding: .utf8) {
+                os_log("[MCP stderr] %{public}@", log: mcpLog, type: .debug, str)
+            }
+        }
 
         do {
+            NSLog("[MCP] Starting process: %@ args: %@", config.command, "\(config.args)")
             try proc.run()
+            NSLog("[MCP] Process started, PID: %d", proc.processIdentifier)
             self.process = proc
 
             // Create StdioTransport with the pipe file descriptors
@@ -86,14 +110,26 @@ actor MCPServerConnection {
             let stdioTransport = StdioTransport(input: inputFD, output: outputFD)
             self.transport = stdioTransport
 
-            let result = try await client.connect(transport: stdioTransport)
+            // Connect with timeout
+            let result = try await withThrowingTaskGroup(of: Initialize.Result.self) { group in
+                group.addTask {
+                    try await self.client.connect(transport: stdioTransport)
+                }
+                group.addTask {
+                    try await Task.sleep(for: .seconds(15))
+                    throw MCPManagerError.connectionTimeout
+                }
+                let result = try await group.next()!
+                group.cancelAll()
+                return result
+            }
             // Discover tools if server supports them
             if result.capabilities.tools != nil {
                 let (discoveredTools, _) = try await client.listTools()
                 self.tools = discoveredTools
             }
             state = .connected
-            print("[MCP] Connected to '\(config.name)' — \(tools.count) tools available")
+            os_log("[MCP] Connected to '%{public}@' — %d tools available", log: mcpLog, type: .info, config.name, tools.count)
         } catch {
             process?.terminate()
             process = nil
@@ -151,12 +187,15 @@ class MCPClientManager: ObservableObject {
     // MARK: - Connect All Enabled Servers
 
     func connectAll() async {
-        for server in configStore.enabledServers {
+        let servers = configStore.enabledServers
+        os_log("[MCP] connectAll: %d enabled servers", log: mcpLog, type: .info, servers.count)
+        for server in servers {
             await connect(server: server)
         }
     }
 
     func connect(server: MCPServerConfig) async {
+        os_log("[MCP] connect called for server '%{public}@', command='%{public}@'", log: mcpLog, type: .fault, server.name, server.command)
         let connection = MCPServerConnection(config: server)
         connections[server.id] = connection
         connectionStates[server.id] = .connecting
@@ -168,7 +207,7 @@ class MCPClientManager: ObservableObject {
             await rebuildToolList()
         } catch {
             connectionStates[server.id] = .error(error.localizedDescription)
-            print("[MCP] Failed to connect '\(server.name)': \(error)")
+            os_log("[MCP] Failed to connect '%{public}@': %{public}@", log: mcpLog, type: .error, server.name, error.localizedDescription)
         }
     }
 
@@ -267,11 +306,13 @@ class MCPClientManager: ObservableObject {
 enum MCPManagerError: LocalizedError {
     case serverNotFound(String)
     case toolNotFound(String)
+    case connectionTimeout
 
     var errorDescription: String? {
         switch self {
         case .serverNotFound(let name): return "MCP server '\(name)' not found"
         case .toolNotFound(let name): return "MCP tool '\(name)' not found"
+        case .connectionTimeout: return "Connection timed out after 15 seconds"
         }
     }
 }
