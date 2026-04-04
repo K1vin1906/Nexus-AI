@@ -211,7 +211,7 @@ class WebSearchService {
     /// Finds the Gemini API key by directly scanning the Keychain
     /// Bypasses CoreData entirely to avoid UUID mismatch issues
     private func getGeminiAPIKey() -> String? {
-        let keychain = Keychain(service: "notfullin.com.macai")
+        let keychain = Keychain(service: TokenManager.keychainService)
         
         do {
             let allKeys = try keychain.allKeys()

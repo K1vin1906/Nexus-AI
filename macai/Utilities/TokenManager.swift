@@ -9,7 +9,7 @@ import Foundation
 import KeychainAccess
 
 final class TokenManager {
-    private static let keychainService = "notfullin.com.macai"
+    static let keychainService = "com.k1vin.nexusai"
     private static let tokenPrefix = "api_token_"
 
     // Local (non‑synchronizable) keychain used when iCloud sync is off
