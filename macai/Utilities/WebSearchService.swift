@@ -138,7 +138,7 @@ class WebSearchService {
             return nil
         }
         
-        let urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\(apiKey)"
+        let urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=\(apiKey)"
         guard let url = URL(string: urlString) else { return nil }
         
         var request = URLRequest(url: url)
