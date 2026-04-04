@@ -9,6 +9,7 @@
 
 import CoreData
 import Foundation
+import KeychainAccess
 import os.log
 
 // MARK: - Search Result Model
@@ -207,40 +208,24 @@ class WebSearchService {
     
     // MARK: - Gemini API Key Retrieval
     
-    /// Finds the Gemini API key by scanning all stored tokens for the Google API key prefix
+    /// Finds the Gemini API key by directly scanning the Keychain
+    /// Bypasses CoreData entirely to avoid UUID mismatch issues
     private func getGeminiAPIKey() -> String? {
-        let context = PersistenceController.shared.container.viewContext
-        var apiKey: String?
+        let keychain = Keychain(service: "notfullin.com.macai")
         
-        context.performAndWait {
-            // Scan ALL service entities and try each one's token
-            let fetchRequest: NSFetchRequest<APIServiceEntity> = APIServiceEntity.fetchRequest()
-            
-            do {
-                let services = try context.fetch(fetchRequest)
-                for service in services {
-                    guard let serviceId = service.id else { continue }
-                    if let key = try? TokenManager.getToken(for: serviceId.uuidString),
-                       !key.isEmpty,
-                       key.hasPrefix("AIza") { // Google/Gemini API keys start with AIza
-                        apiKey = key
-                        return
-                    }
-                    // Also try tokenIdentifier
-                    if let tokenId = service.tokenIdentifier, !tokenId.isEmpty {
-                        if let key = try? TokenManager.getToken(for: tokenId),
-                           !key.isEmpty,
-                           key.hasPrefix("AIza") {
-                            apiKey = key
-                            return
-                        }
-                    }
+        do {
+            let allKeys = try keychain.allKeys()
+            for key in allKeys where key.hasPrefix("api_token_") {
+                if let token = try keychain.get(key),
+                   !token.isEmpty,
+                   token.hasPrefix("AIza") {
+                    return token
                 }
-            } catch {
-                print("WebSearchService: Failed to scan services: \(error)")
             }
+        } catch {
+            print("WebSearchService: Keychain scan failed: \(error)")
         }
         
-        return apiKey
+        return nil
     }
 }
