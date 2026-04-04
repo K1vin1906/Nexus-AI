@@ -34,12 +34,12 @@ struct VoiceInputButton: View {
                 }
 
                 Circle()
-                    .fill(speechManager.isListening ? Color.red : Color.clear)
+                    .fill(speechManager.isListening ? Color.red : Color.secondary.opacity(0.1))
                     .frame(width: buttonSize, height: buttonSize)
 
-                Image(systemName: speechManager.isListening ? "mic.fill" : "mic")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(speechManager.isListening ? .white : .accentColor)
+                Image(systemName: speechManager.isListening ? "mic.fill" : "mic.fill")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(speechManager.isListening ? .white : .secondary)
             }
         }
         .buttonStyle(PlainButtonStyle())

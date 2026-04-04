@@ -25,7 +25,19 @@ private struct GeminiGenerateRequest: Encodable {
     let contents: [GeminiContentRequest]
     let systemInstruction: GeminiContentRequest?
     let generationConfig: GeminiGenerationConfig?
+    let tools: [GeminiTool]?
 }
+
+// Google Search grounding tool
+private struct GeminiTool: Encodable {
+    let googleSearch: GeminiGoogleSearch?
+    
+    enum CodingKeys: String, CodingKey {
+        case googleSearch = "google_search"
+    }
+}
+
+private struct GeminiGoogleSearch: Encodable {}
 
 struct GeminiContentRequest: Encodable {
     let role: String?
@@ -72,6 +84,21 @@ private struct GeminiGenerateResponse: Decodable {
 private struct GeminiCandidate: Decodable {
     let content: GeminiContentResponse?
     let finishReason: String?
+    let groundingMetadata: GeminiGroundingMetadata?
+}
+
+private struct GeminiGroundingMetadata: Decodable {
+    let groundingChunks: [GeminiGroundingChunk]?
+    let webSearchQueries: [String]?
+}
+
+private struct GeminiGroundingChunk: Decodable {
+    let web: GeminiWebChunk?
+}
+
+private struct GeminiWebChunk: Decodable {
+    let uri: String?
+    let title: String?
 }
 
 private struct GeminiContentResponse: Decodable {
@@ -347,10 +374,15 @@ class GeminiHandler: APIService {
         }
 
         let generationConfig = GeminiGenerationConfig(temperature: temperature)
+        
+        // Enable Google Search grounding
+        let searchTool = GeminiTool(googleSearch: GeminiGoogleSearch())
+        
         let body = GeminiGenerateRequest(
             contents: contents,
             systemInstruction: systemInstruction,
-            generationConfig: generationConfig
+            generationConfig: generationConfig,
+            tools: [searchTool]
         )
 
         do {
@@ -553,6 +585,20 @@ class GeminiHandler: APIService {
 
         while message.hasSuffix("\n") {
             message.removeLast()
+        }
+
+        // Append grounding sources if available
+        if let candidate = response.candidates?.first,
+           let chunks = candidate.groundingMetadata?.groundingChunks,
+           !chunks.isEmpty {
+            message += "\n\n---\n**Sources:**\n"
+            for (index, chunk) in chunks.prefix(5).enumerated() {
+                if let web = chunk.web {
+                    let title = web.title ?? "Source"
+                    let uri = web.uri ?? ""
+                    message += "\(index + 1). [\(title)](\(uri))\n"
+                }
+            }
         }
 
         return message.isEmpty ? nil : message

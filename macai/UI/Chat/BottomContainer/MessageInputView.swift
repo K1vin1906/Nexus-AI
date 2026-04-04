@@ -215,36 +215,8 @@ struct MessageInputView: View {
             }
             .frame(height: (attachedImages.isEmpty && attachedFiles.isEmpty) ? 0 : 100)
             
-            HStack(spacing: 8) {
-                if let attachmentButtonIcon {
-                    Menu {
-                        if pdfUploadsAllowed {
-                            Button("Add PDF", action: onAddFile)
-                        }
-                        if imageUploadsAllowed {
-                            Button("Add Image from File", action: onAddImage)
-                            Button("Add Image from Photos") {
-                                isShowingPhotosPicker = true
-                            }
-                        }
-                    } label: {
-                        Image(systemName: attachmentButtonIcon)
-                            .font(.system(size: 16))
-                            .foregroundColor(.accentColor)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .help("Add attachment")
-                }
-
-                // Voice input button
-                VoiceInputButton(speechManager: speechManager) { transcribedText in
-                    if text.isEmpty {
-                        text = transcribedText
-                    } else {
-                        text += " " + transcribedText
-                    }
-                }
-                
+            // MARK: - Redesigned Input Container (A4)
+            VStack(spacing: 0) {
                 MacaiTextField(
                     effectivePlaceholderText,
                     text: $text,
@@ -259,38 +231,115 @@ struct MessageInputView: View {
                         onEnter()
                     }
                 )
-                .padding(inputPadding)
+                .padding(.horizontal, 12)
+                .padding(.top, 10)
+                .padding(.bottom, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.clear)
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(
-                            isHoveringDropZone
-                                ? Color.green.opacity(0.8)
-                                : (isFocused == .focused ? lineColorOnFocus : lineColorOnBlur),
-                            lineWidth: isHoveringDropZone
-                                ? 6 : (isFocused == .focused ? lineWidthOnFocus : lineWidthOnBlur)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                )
                 .onTapGesture {
                     isFocused = .focused
                 }
 
-                if shouldShowAccessoryButton {
-                    let config = accessoryButtonConfig
-                    InputAccessoryButton(
-                        systemName: config.systemName,
-                        size: defaultInputHeight,
-                        foregroundColor: config.foregroundColor,
-                        backgroundColor: config.backgroundColor,
-                        helpText: config.helpText,
-                        action: config.action
-                    )
-                    .transition(stopButtonTransition)
+                // Bottom toolbar inside the input container
+                HStack(spacing: 4) {
+                    if let attachmentButtonIcon {
+                        Menu {
+                            if pdfUploadsAllowed {
+                                Button(action: onAddFile) {
+                                    Label("Add PDF", systemImage: "doc.badge.plus")
+                                }
+                            }
+                            if imageUploadsAllowed {
+                                Button(action: onAddImage) {
+                                    Label("Add Image from File", systemImage: "photo.badge.plus")
+                                }
+                                Button(action: { isShowingPhotosPicker = true }) {
+                                    Label("Add Image from Photos", systemImage: "photo.on.rectangle.angled")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: attachmentButtonIcon)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(.secondary)
+                                .frame(width: 32, height: 32)
+                                .background(
+                                    Circle()
+                                        .fill(Color.secondary.opacity(0.1))
+                                )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .help("Add attachment")
+                    }
+
+                    VoiceInputButton(speechManager: speechManager) { transcribedText in
+                        if text.isEmpty {
+                            text = transcribedText
+                        } else {
+                            text += " " + transcribedText
+                        }
+                    }
+
+                    Spacer()
+
+                    if shouldShowAccessoryButton {
+                        let config = accessoryButtonConfig
+                        InputAccessoryButton(
+                            systemName: config.systemName,
+                            size: 30,
+                            foregroundColor: config.foregroundColor,
+                            backgroundColor: config.backgroundColor,
+                            helpText: config.helpText,
+                            action: config.action
+                        )
+                        .transition(stopButtonTransition)
+                    } else {
+                        // Send button
+                        Button(action: {
+                            guard !isInferenceInProgress else { return }
+                            guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                    || !attachedImages.isEmpty || !attachedFiles.isEmpty else { return }
+                            onEnter()
+                        }) {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(width: 34, height: 34)
+                                .background(
+                                    Circle()
+                                        .fill(
+                                            text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                                && attachedImages.isEmpty && attachedFiles.isEmpty
+                                                ? Color(red: 108/255, green: 92/255, blue: 231/255).opacity(0.4)
+                                                : Color(red: 108/255, green: 92/255, blue: 231/255)
+                                        )
+                                )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .help("Send message (Enter)")
+                    }
                 }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 6)
+                .frame(maxWidth: .infinity)
+                .animation(stopButtonAnimation, value: shouldShowAccessoryButton)
             }
-            .animation(stopButtonAnimation, value: shouldShowAccessoryButton)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(Color(NSColor.controlBackgroundColor))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(
+                                isHoveringDropZone
+                                    ? Color.green.opacity(0.8)
+                                    : (isFocused == .focused
+                                        ? Color(red: 108/255, green: 92/255, blue: 231/255).opacity(0.6)
+                                        : Color.secondary.opacity(0.3)),
+                                lineWidth: isHoveringDropZone
+                                    ? 4 : (isFocused == .focused ? 2 : 1)
+                            )
+                    )
+            )
+            .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
         }
         .overlay(alignment: .top) {
             if speechManager.isListening {

@@ -81,6 +81,7 @@
 		4A8E2E0B2C56FCFD00F077F2 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8E2E0A2C56FCFD00F077F2 /* ChatViewModel.swift */; };
 		4A98B1C029CA60ED0064835A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A98B1BF29CA60ED0064835A /* Info.plist */; };
 		4AA681C72D3DAB40005C4E6E /* ChatBottomContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA681C62D3DAB40005C4E6E /* ChatBottomContainerView.swift */; };
+		66FAA5C7B3254E69B2D3DC6A /* QuickActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1D7B7714B643E2B6A26D48 /* QuickActionsView.swift */; };
 		4AA6EF592C565F90003B6D41 /* APIServiceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA6EF582C565F90003B6D41 /* APIServiceConfig.swift */; };
 		4AA6EF5B2C565FDF003B6D41 /* APIServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA6EF5A2C565FDF003B6D41 /* APIServiceFactory.swift */; };
 		4AA6EF5D2C566009003B6D41 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA6EF5C2C566009003B6D41 /* MessageManager.swift */; };
@@ -231,6 +232,7 @@
 		4A8E2E0A2C56FCFD00F077F2 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		4A98B1BF29CA60ED0064835A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4AA681C62D3DAB40005C4E6E /* ChatBottomContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBottomContainerView.swift; sourceTree = "<group>"; };
+		4B1D7B7714B643E2B6A26D48 /* QuickActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionsView.swift; sourceTree = "<group>"; };
 		4AA6EF582C565F90003B6D41 /* APIServiceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceConfig.swift; sourceTree = "<group>"; };
 		4AA6EF5A2C565FDF003B6D41 /* APIServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceFactory.swift; sourceTree = "<group>"; };
 		4AA6EF5C2C566009003B6D41 /* MessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 			children = (
 				4A1614142D46C86800A1EF8D /* PersonaSelectorView.swift */,
 				4AA681C62D3DAB40005C4E6E /* ChatBottomContainerView.swift */,
+				4B1D7B7714B643E2B6A26D48 /* QuickActionsView.swift */,
 				4A27FF902DA1C43E0075D730 /* MessageInputView.swift */,
 			);
 			path = BottomContainer;
@@ -811,6 +814,7 @@
 				4A885C542CEA3D960018BBED /* PreviewStateManager.swift in Sources */,
 				4AA6EF5B2C565FDF003B6D41 /* APIServiceFactory.swift in Sources */,
 				4AA681C72D3DAB40005C4E6E /* ChatBottomContainerView.swift in Sources */,
+				66FAA5C7B3254E69B2D3DC6A /* QuickActionsView.swift in Sources */,
 				4A1614132D46B9BA00A1EF8D /* SystemMessageBubbleView.swift in Sources */,
 				4AA6EF592C565F90003B6D41 /* APIServiceConfig.swift in Sources */,
 				4AADF71F2C9CE788001B7A26 /* ClaudeHandler.swift in Sources */,

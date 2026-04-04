@@ -82,6 +82,14 @@ struct ChatBottomContainerView: View {
                     }
                 }
 
+                // Quick Actions bar (A4 redesign)
+                if !isEditingSystemMessage {
+                    QuickActionsView { prompt in
+                        newMessage = prompt
+                        onSendMessage()
+                    }
+                }
+
                 HStack {
                     MessageInputView(
                         text: $newMessage,
@@ -99,12 +107,9 @@ struct ChatBottomContainerView: View {
                         onCancelEdit: onCancelEdit,
                         speechManager: speechManager
                     )
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(nil)
-                    .padding()
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                 }
-                .border(width: 1, edges: [.top], color: Color(NSColor.windowBackgroundColor).opacity(0.8))
             }
 
             Button(action: {
