@@ -286,9 +286,12 @@ class OpenAIResponsesHandler: OpenAIHandlerBase, APIService {
             jsonDict["temperature"] = temperatureOverride
         }
 
+        // Build tools array: always include web search, optionally image generation
+        var tools: [[String: Any]] = [["type": "web_search_preview"]]
         if shouldIncludeImageGenerationTool() {
-            jsonDict["tools"] = [["type": "image_generation"]]
+            tools.append(["type": "image_generation"])
         }
+        jsonDict["tools"] = tools
 
         if stream {
             jsonDict["stream"] = true

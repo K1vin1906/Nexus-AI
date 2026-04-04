@@ -15,6 +15,9 @@ class MessageManager: ObservableObject {
     private let updateInterval = AppConstants.streamedResponseUpdateUIInterval
     private var streamTask: Task<Void, Never>?
     private var cancelRequested = false
+    
+    /// Web search context injected before each request (for non-native-search providers)
+    private var pendingSearchContext: String?
 
     init(apiService: APIService, viewContext: NSManagedObjectContext) {
         self.apiService = apiService
@@ -27,6 +30,27 @@ class MessageManager: ObservableObject {
     }
 
     func sendMessage(
+        _ message: String,
+        in chat: ChatEntity,
+        contextSize: Int,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        let providerName = chat.apiService?.type ?? apiService.name
+        
+        if !WebSearchService.supportsNativeSearch(providerName) {
+            // Async search first, then send
+            Task { @MainActor in
+                let searchResult = await WebSearchService.shared.search(query: message)
+                self.pendingSearchContext = searchResult?.formattedContext()
+                self.performSendMessage(message, in: chat, contextSize: contextSize, completion: completion)
+            }
+        } else {
+            pendingSearchContext = nil
+            performSendMessage(message, in: chat, contextSize: contextSize, completion: completion)
+        }
+    }
+    
+    private func performSendMessage(
         _ message: String,
         in chat: ChatEntity,
         contextSize: Int,
@@ -90,13 +114,24 @@ class MessageManager: ObservableObject {
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         cancelRequested = false
-        let requestMessages = prepareRequestMessages(userMessage: message, chat: chat, contextSize: contextSize)
         let temperature = (chat.persona?.temperature ?? AppConstants.defaultTemperatureForChat).roundedToOneDecimal()
 
         streamTask?.cancel()
         streamTask = Task { [weak self] in
             guard let self = self else { return }
             defer { self.streamTask = nil }
+            
+            // Web search for providers without native search
+            let providerName = chat.apiService?.type ?? self.apiService.name
+            if !WebSearchService.supportsNativeSearch(providerName) {
+                let searchResult = await WebSearchService.shared.search(query: message)
+                self.pendingSearchContext = searchResult?.formattedContext()
+            } else {
+                self.pendingSearchContext = nil
+            }
+            
+            let requestMessages = self.prepareRequestMessages(userMessage: message, chat: chat, contextSize: contextSize)
+            
             do {
                 let stream = try await apiService.sendMessageStream(requestMessages, temperature: temperature)
                 var accumulatedResponse = ""
@@ -351,16 +386,26 @@ class MessageManager: ObservableObject {
 
         if !AppConstants.openAiReasoningModels.contains(chat.gptModel) {
             var systemContent = chat.systemMessage
+            // Inject web search results for non-native-search providers
+            if let searchContext = pendingSearchContext {
+                systemContent += searchContext
+                pendingSearchContext = nil
+            }
             messages.append([
                 "role": "system",
                 "content": systemContent,
             ])
         }
         else {
-            // Models like o1-mini and o1-preview don't support "system" role. However, we can pass the system message with "user" role instead.
+            // Models like o1-mini and o1-preview don't support "system" role.
+            var systemContent = "Take this message as the system message: \(chat.systemMessage)"
+            if let searchContext = pendingSearchContext {
+                systemContent += searchContext
+                pendingSearchContext = nil
+            }
             messages.append([
                 "role": "user",
-                "content": "Take this message as the system message: \(chat.systemMessage)",
+                "content": systemContent,
             ])
         }
 
